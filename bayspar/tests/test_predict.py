@@ -4,6 +4,40 @@ import numpy as np
 from bayspar.predict import predict_seatemp, predict_sst, predict_subt, predict_tex
 
 
+def test_predict_tex_sst():
+    # TODO(brews): Double check this. It is a very rough test.
+
+    np.random.seed(123)
+
+    proxy_ts = np.array([1, 15, 30])
+    lat = -79.49700165
+    lon = -18.699981690000016
+    temptype = 'sst'
+    save_ensemble = True
+    nens = 15000
+
+    goal = {'preds': np.array([[0.30417229, 0.387622, 0.47020701],
+                               [0.43638587, 0.54384393, 0.64827802],
+                               [0.5504807, 0.71117075, 0.86330653]]),
+            'siteloc': (lat, lon),
+            'gridloc': (-80, -10),
+            'predsens': np.ones((3, nens))
+            }
+
+    victim = predict_tex(dats=proxy_ts, lat=lat, lon=lon, temptype=temptype,
+                         save_ensemble=save_ensemble, nens=nens)
+
+    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=0.25)
+    assert victim['siteloc'] == goal['siteloc']
+    assert victim['gridloc'] == goal['gridloc']
+    assert victim['predsens'].shape == goal['predsens'].shape
+
+
+def test_predict_tex_subt():
+    # TODO(brews): Need this test.
+    pass
+
+
 def test_predict_seatemp():
     np.random.seed(123)
 

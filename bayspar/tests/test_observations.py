@@ -28,6 +28,7 @@ def test_distance_from():
 
 
 def test_get_close_obs():
+    # TODO(brews): Need unittests to ensure the distance-min_obs switches work.
     lat = 2
     lon = -100
 

@@ -5,9 +5,81 @@ from bayspar.posterior import sst_draws, subt_draws
 from bayspar.observations import sst_obs, subt_obs
 
 
-def predict_tex():
+def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
+    """Predict TEX86 from sea temperature
+
+    Parameters
+    ----------
+    dats : ndarray
+        n-length array of sea temperature observations (°C) from a single
+        location.
+    lat : float
+        Site latitude from -90 to 90.
+    lon : float
+        Site longitude from -180 to 180.
+    temptype : str
+        Type of sea temperature used. Either 'sst' for sea-surface or 'subt'.
+    nens : int
+        Size of MCMC ensemble draws to use for calculation.
+    save_ensemble : bool
+        Should the entire MCMC ensemble be returned? If not then just
+        percentiles.
+
+    Returns
+    -------
+    output : dict
+        preds : ndarray
+            Predicted TEX86 percentiles.
+        siteloc : tuple
+            Site (lat, lon).
+        gridloc': sequence
+            Latlon of the observation gridpoint used as prior mean.
+        predsens': ndarray or None
+            If 'save_ensemble' is True, this is the full MCMC ensemble for TEX86
+            prediction. Otherwise, is None.
+    """
     # TODO(brews): Write predict_tex() function.
-    pass
+    assert temptype in ['sst', 'subt']
+    assert -180 <= lon <= 180
+    assert -90 <= lat <= 90
+
+    nd = len(dats)
+    pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens) - 1).astype(int)
+
+    draws = None
+    if temptype == 'sst':
+        draws = sst_draws
+    elif temptype == 'subt':
+        draws = subt_draws
+
+    ntk = draws.alpha_samples_comp.shape[1]
+    assert ntk > nens
+
+    alpha_samples_comp, beta_samples_comp = draws.find_alphabeta_near(lat=lat,
+                                                                      lon=lon)
+    tau2_samples = draws.tau2_samples
+
+    grid_latlon = draws.find_nearest_latlon(lat=lat, lon=lon)
+
+    tex = np.empty((nd, nens))
+    for i in range(nens):
+        tau2_now = tau2_samples[i]
+        beta_now = beta_samples_comp[i]
+        alpha_now = alpha_samples_comp[i]
+        tex[:, i] = np.random.normal(dats * beta_now + alpha_now,
+                                     np.sqrt(tau2_now))
+
+    tex_s = np.sort(tex, axis=1)
+
+    output = {'preds': tex_s[:, pers3],
+              'siteloc': (lat, lon),
+              'gridloc': tuple(grid_latlon),
+              'predsens': None}
+
+    if save_ensemble:
+        output['predsens'] = tex
+
+    return output
 
 
 def predict_sst(*args, **kwargs):
@@ -41,7 +113,8 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, nens=5000,
     nens : int
         Size of MCMC ensemble draws to use for calculation.
     save_ensemble : bool
-        Should the entire MCMC ensemble be returned or just percentiles?
+        Should the entire MCMC ensemble be returned? If not, then just
+        percentiles.
 
     Returns
     -------
