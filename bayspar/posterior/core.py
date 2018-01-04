@@ -1,4 +1,5 @@
 import os.path
+from copy import deepcopy
 import numpy as np
 from scipy.io import loadmat
 
@@ -60,14 +61,28 @@ class Draws:
         return alpha_select, beta_select
 
 
+draws_sst = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', 'sst'),
+                  alpha_samples_field=read_draws('alpha_samples.mat', 'sst')['field'],
+                  beta_samples_comp=read_draws('beta_samples_comp.mat', 'sst'),
+                  beta_samples_field=read_draws('beta_samples.mat', 'sst')['field'],
+                  tau2_samples=read_draws('tau2_samples.mat', 'sst'),
+                  locs_comp=read_draws('Locs_Comp.mat', 'sst'))
+
+
+draws_subt = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', 'subt'),
+                   alpha_samples_field=read_draws('alpha_samples.mat', 'subt')['field'],
+                   beta_samples_comp=read_draws('beta_samples_comp.mat', 'subt'),
+                   beta_samples_field=read_draws('beta_samples.mat', 'subt')['field'],
+                   tau2_samples=read_draws('tau2_samples.mat', 'subt'),
+                   locs_comp=read_draws('Locs_Comp.mat', 'subt'))
+
+
 def get_draws(drawtype):
     """Get Draws instance for a draw type
     """
-    assert drawtype in ['sst', 'subt']
-    out = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', drawtype),
-                alpha_samples_field=read_draws('alpha_samples.mat', drawtype)['field'],
-                beta_samples_comp=read_draws('beta_samples_comp.mat', drawtype),
-                beta_samples_field=read_draws('beta_samples.mat', drawtype)['field'],
-                tau2_samples=read_draws('tau2_samples.mat', drawtype),
-                locs_comp=read_draws('Locs_Comp.mat', drawtype))
-    return out
+    if drawtype == 'sst':
+        return deepcopy(draws_sst)
+    elif drawtype == 'subt':
+        return deepcopy(draws_subt)
+    else:
+        assert drawtype in ['sst', 'subt']
