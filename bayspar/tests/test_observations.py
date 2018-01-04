@@ -49,3 +49,19 @@ def test_get_close_obs():
     np.testing.assert_allclose(victim_dists[0], goal_dists_head, atol=1)
     np.testing.assert_allclose(victim_dists[-1], goal_dists_tail, atol=1)
     assert victim_dists.shape == goal_shape
+
+
+def test_find_within_tolerance():
+    # TODO(brews): Manually check this solution with original code.
+    x = 0.5
+    tol = 0.01
+
+    goal_loc = np.array([[-20, 10], [40, 30], [-40, 150], [-40, -170]])
+    goal_vals = np.array([0.49618824, 0.503375, 0.50663037, 0.50334])
+
+    obs1 = get_tex('sst')
+
+    match_loc, match_vals = obs1.find_within_tolerance(x, tol)
+
+    np.testing.assert_equal(match_loc, goal_loc)
+    np.testing.assert_allclose(match_vals, goal_vals, atol=1e-4)
