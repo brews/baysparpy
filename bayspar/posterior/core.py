@@ -8,7 +8,7 @@ SUBT_PATH = os.path.join(HERE, 'Output_SpatAg_SST')
 SST_PATH = os.path.join(HERE, 'Output_SpatAg_subT')
 
 
-def get_draws(flstr, drawtype):
+def read_draws(flstr, drawtype):
     """Grab single squeezed array from MATLAB draw file
     """
     flpath = None
@@ -56,12 +56,12 @@ class Draws:
         return alpha_select, beta_select
 
 
-sst_draws = Draws(alpha_samples_comp=get_draws('alpha_samples_comp.mat', 'sst'),
-                  beta_samples_comp=get_draws('beta_samples_comp.mat', 'sst'),
-                  tau2_samples=get_draws('tau2_samples.mat', 'sst'),
-                  locs_comp=get_draws('Locs_Comp.mat', 'sst'))
-
-subt_draws = Draws(alpha_samples_comp=get_draws('alpha_samples_comp.mat', 'subt'),
-                   beta_samples_comp=get_draws('beta_samples_comp.mat', 'subt'),
-                   tau2_samples=get_draws('tau2_samples.mat', 'subt'),
-                   locs_comp=get_draws('Locs_Comp.mat', 'subt'))
+def get_draws(drawtype):
+    """Get Draws instance for a draw type
+    """
+    assert drawtype in ['sst', 'subt']
+    out = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', drawtype),
+                beta_samples_comp=read_draws('beta_samples_comp.mat', drawtype),
+                tau2_samples=read_draws('tau2_samples.mat', drawtype),
+                locs_comp=read_draws('Locs_Comp.mat', drawtype))
+    return out

@@ -1,1 +1,1 @@
-from bayspar.observations.core import sst_obs, subt_obs
+from bayspar.observations.core import get_seatemp, get_tex

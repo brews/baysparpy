@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from bayspar.observations.core import chord_distance, sst_obs
+from bayspar.observations.core import chord_distance, get_seatemp, get_tex
 
 
 def test_chord_distance():
@@ -20,7 +20,7 @@ def test_distance_from():
     goal_tail = 8828.31316064
     goal_shape = (37686, 1)
 
-    victim = sst_obs.distance_from(lat=lat, lon=lon)
+    victim = get_seatemp('sst').distance_from(lat=lat, lon=lon)
 
     np.testing.assert_allclose(victim[0, 0], goal_head, atol=1)
     np.testing.assert_allclose(victim[-1, 0], goal_tail, atol=1)
@@ -40,7 +40,7 @@ def test_get_close_obs():
 
     goal_shape = (60,)
 
-    victim_obs, victim_dists = sst_obs.get_close_obs(lat, lon)
+    victim_obs, victim_dists = get_seatemp('sst').get_close_obs(lat, lon)
 
     np.testing.assert_allclose(victim_obs[0], goal_obs_head, atol=1)
     np.testing.assert_allclose(victim_obs[-1], goal_obs_tail, atol=1)

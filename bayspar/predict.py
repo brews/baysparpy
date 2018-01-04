@@ -1,8 +1,8 @@
 import numpy as np
 
 from bayspar.utils import target_timeseries_pred
-from bayspar.posterior import sst_draws, subt_draws
-from bayspar.observations import sst_obs, subt_obs
+from bayspar.posterior import get_draws
+from bayspar.observations import get_seatemp, get_tex
 
 
 def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
@@ -46,11 +46,7 @@ def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
     nd = len(dats)
     pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens) - 1).astype(int)
 
-    draws = None
-    if temptype == 'sst':
-        draws = sst_draws
-    elif temptype == 'subt':
-        draws = subt_draws
+    draws = get_draws(temptype)
 
     ntk = draws.alpha_samples_comp.shape[1]
     assert ntk > nens
@@ -137,14 +133,8 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, nens=5000,
     assert -180 <= lon <= 180
     assert -90 <= lat <= 90
 
-    draws = None
-    obs = None
-    if temptype == 'sst':
-        draws = sst_draws
-        obs = sst_obs
-    elif temptype == 'subt':
-        draws = subt_draws
-        obs = subt_obs
+    draws = get_draws(temptype)
+    obs = get_seatemp(temptype)
 
     # TODO(brews): trim tau**2 (may not have burnin) ln 92 of bayspar_tex.m
     ntk = draws.alpha_samples_comp.shape[1]

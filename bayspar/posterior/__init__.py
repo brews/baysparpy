@@ -1,1 +1,1 @@
-from bayspar.posterior.core import sst_draws, subt_draws
+from bayspar.posterior.core import get_draws

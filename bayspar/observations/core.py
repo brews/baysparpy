@@ -5,8 +5,8 @@ from scipy.io import loadmat
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_obs(obstype):
-    """Grab squeezed variable and locs array from flat MATLAB files
+def read_seatemp(obstype):
+    """Grab squeezed variable and locs array from sea temperature MATLAB files
     """
     assert obstype.lower() in ['subt', 'sst']
     locs_template = 'locs_woa_1degree_asvec_{}.mat'
@@ -25,6 +25,20 @@ def get_obs(obstype):
     locs = loadmat(locs_path)['locs_st_obs'].squeeze()
 
     return var, locs
+
+
+def read_tex(obstype):
+    """Grab squeezed variables array from TEX86 MATLAB files
+    """
+    var_template = 'Data_Input_SpatAg_{}.mat'
+    locs_path = None
+    var_path = None
+    if obstype == 'sst':
+        var_path = os.path.join(HERE, var_template.format('SST'))
+    elif obstype == 'subt':
+        var_path = os.path.join(HERE, var_template.format('subT'))
+    var = loadmat(var_path)['st_obs_ave_vec'].squeeze()
+    return var
 
 
 def chord_distance(latlon1, latlon2):
@@ -74,7 +88,7 @@ def chord_distance(latlon1, latlon2):
     return dists.reshape(m, n)
 
 
-class ObsField:
+class SeaTempObs:
     """Observed climate fields as used in calibration
     """
     def __init__(self, st_obs_ave_vec, locs_st_obs):
@@ -147,6 +161,12 @@ class ObsField:
         return obs_sorted[msk], d_sorted[msk]
 
 
-sst_obs = ObsField(*get_obs('sst'))
+def get_seatemp(obstype):
+    """Get SeaTempObs instance for observation type"""
+    assert obstype in ['sst', 'subt']
+    return SeaTempObs(*read_seatemp(obstype))
 
-subt_obs = ObsField(*get_obs('subt'))
+
+def get_tex(obstype):
+    # TODO(brews)
+    pass
