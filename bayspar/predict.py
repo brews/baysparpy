@@ -90,7 +90,7 @@ def predict_subt(*args, **kwargs):
     return predict_seatemp(*args, temptype='subt', **kwargs)
 
 
-def predict_seatemp(dats, lat, lon, prior_std, temptype, nens=5000,
+def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000,
                     save_ensemble=False):
     """Predict sea temperature with TEX86
 
@@ -106,6 +106,9 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, nens=5000,
         Prior standard deviation for sea temperature (°C).
     temptype : str
         Type of sea temperature desired. Either 'sst' for sea-surface or 'subt'.
+    prior_mean : float or None, optional
+        Prior mean for sea temperature (°C). If 'None', the prior mean is found
+        by searching for a "close" value in observed sea temperature records.
     nens : int
         Size of MCMC ensemble draws to use for calculation.
     save_ensemble : bool
@@ -142,16 +145,17 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, nens=5000,
     # TODO(brews): trim posterior draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
 
     nd = len(dats)
-    pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens) - 1).astype(int)
 
-    close_obs, close_dist = obs.get_close_obs(lat=lat, lon=lon)
-    prior_mean_val = close_obs.mean()
+    if prior_mean is None:
+        close_obs, close_dist = obs.get_close_obs(lat=lat, lon=lon)
+        prior_mean = close_obs.mean()
+
     alpha_samples_comp, beta_samples_comp = draws.find_alphabeta_near(lat=lat, lon=lon)
     tau2_samples = draws.tau2_samples
 
     grid_latlon = draws.find_nearest_latlon(lat=lat, lon=lon)
 
-    prior_par = {'mu': np.ones(nd) * prior_mean_val,
+    prior_par = {'mu': np.ones(nd) * prior_mean,
                  'inv_cov': np.eye(nd) * prior_std ** -2}
 
     preds = np.empty((nd, nens))
@@ -165,10 +169,11 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, nens=5000,
 
     preds_s = np.sort(preds, axis=1)
 
+    pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens) - 1).astype(int)
     output = {'preds': preds_s[:, pers3],
               'siteloc': (lat, lon),
               'gridloc': tuple(grid_latlon),
-              'priormean': prior_mean_val,
+              'priormean': prior_mean,
               'priorstd': prior_std,
               'predsens': None}
 
