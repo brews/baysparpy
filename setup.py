@@ -34,5 +34,7 @@ setup(
         'test': ['pytest']
         },
 
-    package_data={'bayspar': ['posterior/*.mat']},
+    package_data={'bayspar': ['posterior/Output_SpatAg_subT/*.mat',
+                              'posterior/Output_SpatAg_SST/*.mat',
+                              'observations/*.mat']},
 )
