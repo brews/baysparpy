@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from bayspar.predict import predict_seatemp, predict_sst, predict_subt, predict_tex
+from bayspar.predict import predict_seatemp, predict_sst, predict_subt, predict_tex, predict_seatemp_analog
 
 
 def test_predict_tex_sst():
@@ -138,5 +138,48 @@ def test_predict_subt():
     assert victim['gridloc'] == goal['gridloc']
     np.testing.assert_allclose(victim['priormean'], goal['priormean'],
                                atol=1e-5)
+    assert victim['priorstd'] == goal['priorstd']
+    assert victim['predsens'].shape == goal['predsens'].shape
+
+
+def test_predict_seatemp_analog_sst():
+    np.random.seed(123)
+
+    proxy_ts = np.array([0.7900, 0.7400, 0.7700, 0.7000])
+    temptype = 'sst'
+    prior_std = 20
+    prior_mean = 30
+    save_ensemble = True
+    nens = 15000
+    search_tol = 0.0783  # np.std(proxy_ts) ** 2
+
+    goal = {'preds': np.array([[24.814875, 31.166047, 38.907744],
+                               [21.668114, 27.766713, 35.005549],
+                               [23.579018, 29.816183, 37.33671],
+                               [19.071693, 25.00324, 31.894863]]),
+            'anlocs': np.array([[110, 20], [110, 0], [50, 20], [90, 0],
+                                [150, 0], [50, -20], [70, 20], [170, 0],
+                                [-170, -20], [-90, 20], [-70, 20], [-170, 0],
+                                [110, -20]]),
+            'priormean': 30,
+            'priorstd': 20,
+            'predsens': np.ones((4, 13, nens))
+            }
+
+    victim = predict_seatemp_analog(dats=proxy_ts, prior_std=prior_std,
+                                    temptype=temptype,
+                                    search_tol=search_tol,
+                                    prior_mean=prior_mean, nens=nens,
+                                    save_ensemble=save_ensemble)
+
+    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=1)
+
+    goal_anloc = [tuple(x) for x in goal['anlocs'][:, ::-1].tolist()]  # Because Im an idiot and wrote lonlat
+    goal_anloc.sort()
+    victim_anloc = [tuple(x) for x in victim['anlocs'].tolist()]
+    victim_anloc.sort()
+    assert victim_anloc == goal_anloc
+
+    assert victim['priormean'] == goal['priormean']
     assert victim['priorstd'] == goal['priorstd']
     assert victim['predsens'].shape == goal['predsens'].shape
