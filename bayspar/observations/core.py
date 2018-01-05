@@ -1,4 +1,5 @@
 import os.path
+from copy import deepcopy
 import numpy as np
 from scipy.io import loadmat
 
@@ -212,13 +213,27 @@ class TexObs:
         return latlon_match, np.array(vals_match)
 
 
+seatemp_sst = SeaTempObs(*read_seatemp('sst'))
+seatemp_subt = SeaTempObs(*read_seatemp('subt'))
+tex_sst = TexObs(*read_tex('sst'))
+tex_subt = TexObs(*read_tex('subt'))
+
+
 def get_seatemp(obstype):
     """Get SeaTempObs instance for observation type"""
-    assert obstype in ['sst', 'subt']
-    return SeaTempObs(*read_seatemp(obstype))
+    if obstype == 'sst':
+        return deepcopy(seatemp_sst)
+    elif obstype == 'subt':
+        return deepcopy(seatemp_subt)
+    else:
+        assert obstype in ['sst', 'subt']
 
 
 def get_tex(obstype):
     """Get TexObs instance for observation type"""
-    assert obstype in ['sst', 'subt']
-    return TexObs(*read_tex(obstype))
+    if obstype == 'sst':
+        return deepcopy(tex_sst)
+    elif obstype == 'subt':
+        return deepcopy(tex_subt)
+    else:
+        assert obstype in ['sst', 'subt']
