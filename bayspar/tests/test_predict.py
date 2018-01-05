@@ -33,9 +33,10 @@ def test_predict_tex_sst():
     assert victim['predsens'].shape == goal['predsens'].shape
 
 
+@pytest.mark.skip(reason='Not implemented')
 def test_predict_tex_subt():
     # TODO(brews): Need this test.
-    NotImplementedError
+    raise NotImplementedError
 
 
 def test_predict_seatemp():
