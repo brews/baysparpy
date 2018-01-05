@@ -79,7 +79,7 @@ def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
 
 
 def predict_sst(*args, **kwargs):
-    """Predict sea surface temperature with TEX86
+    """Predict sea-surface temperature with TEX86
     """
     return predict_seatemp(*args, temptype='sst', **kwargs)
 
@@ -90,8 +90,7 @@ def predict_subt(*args, **kwargs):
     return predict_seatemp(*args, temptype='subt', **kwargs)
 
 
-def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000,
-                    save_ensemble=False):
+def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000, save_ensemble=False):
     """Predict sea temperature with TEX86
 
     Parameters
@@ -183,8 +182,7 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
     return output
 
 
-def predict_seatemp_analog(dats, prior_std, temptype, search_tol,
-                           prior_mean=None, nens=5000, save_ensemble=False):
+def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=None, nens=5000, save_ensemble=False):
     """Predict sea temperature with TEX86, using the analog method
 
     Parameters
