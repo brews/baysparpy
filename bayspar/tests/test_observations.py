@@ -56,12 +56,12 @@ def test_find_within_tolerance():
     x = 0.5
     tol = 0.01
 
-    goal_loc = np.array([[-20, 10], [40, 30], [-40, 150], [-40, -170]])
+    goal_loc = [(-20, 10), (40, 30), (-40, 150), (-40, -170)]
     goal_vals = np.array([0.49618824, 0.503375, 0.50663037, 0.50334])
 
     obs1 = get_tex('sst')
 
     match_loc, match_vals = obs1.find_within_tolerance(x, tol)
 
-    np.testing.assert_equal(match_loc, goal_loc)
+    assert match_loc == goal_loc
     np.testing.assert_allclose(match_vals, goal_vals, atol=1e-4)

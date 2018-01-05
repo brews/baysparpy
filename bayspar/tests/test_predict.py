@@ -1,7 +1,15 @@
 import pytest
 import numpy as np
 
-from bayspar.predict import predict_seatemp, predict_sst, predict_subt, predict_tex, predict_seatemp_analog
+from bayspar.predict import (Prediction, predict_seatemp, predict_sst,
+                             predict_subt, predict_tex, predict_seatemp_analog)
+
+
+def test_percentile():
+    prediction_test = Prediction(ensemble=np.array([range(10), range(10)]))
+    victim = prediction_test.percentile()
+    goal = np.array([[0, 0], [4, 4], [9, 9]]).T
+    np.testing.assert_equal(victim, goal)
 
 
 def test_predict_tex_sst():
@@ -20,17 +28,17 @@ def test_predict_tex_sst():
                                [0.43638587, 0.54384393, 0.64827802],
                                [0.5504807, 0.71117075, 0.86330653]]),
             'siteloc': (lat, lon),
-            'gridloc': (-80, -10),
+            'gridloc': [(-80, -10)],
             'predsens': np.ones((3, nens))
             }
 
     victim = predict_tex(dats=proxy_ts, lat=lat, lon=lon, temptype=temptype,
                          save_ensemble=save_ensemble, nens=nens)
 
-    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=0.25)
-    assert victim['siteloc'] == goal['siteloc']
-    assert victim['gridloc'] == goal['gridloc']
-    assert victim['predsens'].shape == goal['predsens'].shape
+    np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=0.25)
+    assert victim.location == goal['siteloc']
+    assert victim.modelparam_gridpoints == goal['gridloc']
+    assert victim.ensemble.shape == goal['predsens'].shape
 
 
 @pytest.mark.skip(reason='Not implemented')
@@ -56,7 +64,7 @@ def test_predict_seatemp():
                                [-11.21444389, -4.82280281, 1.3729362],
                                [-9.55533595, -3.25380571, 2.91106291]]),
             'siteloc': (lat, lon),
-            'gridloc': (-60, -70),
+            'gridloc': [(-60, -70)],
             'priormean': -0.434658923291294,
             'priorstd': 6,
             'predsens': np.ones((5, nens))
@@ -66,13 +74,13 @@ def test_predict_seatemp():
                              prior_std=prior_std, temptype=temptype,
                              save_ensemble=save_ensemble, nens=nens)
 
-    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=1)
-    assert victim['siteloc'] == goal['siteloc']
-    assert victim['gridloc'] == goal['gridloc']
-    np.testing.assert_allclose(victim['priormean'], goal['priormean'],
+    np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
+    assert victim.location == goal['siteloc']
+    assert victim.modelparam_gridpoints == goal['gridloc']
+    np.testing.assert_allclose(victim.prior_mean, goal['priormean'],
                                atol=1e-5)
-    assert victim['priorstd'] == goal['priorstd']
-    assert victim['predsens'].shape == goal['predsens'].shape
+    assert victim.prior_std == goal['priorstd']
+    assert victim.ensemble.shape == goal['predsens'].shape
 
 
 def test_predict_sst():
@@ -91,7 +99,7 @@ def test_predict_sst():
                                [-11.21444389, -4.82280281, 1.3729362],
                                [-9.55533595, -3.25380571, 2.91106291]]),
             'siteloc': (lat, lon),
-            'gridloc': (-60, -70),
+            'gridloc': [(-60, -70)],
             'priormean': 0.0535,
             'priorstd': 6,
             'predsens': np.ones((5, nens))
@@ -100,13 +108,13 @@ def test_predict_sst():
     victim = predict_sst(dats=proxy_ts, lat=lat, lon=lon, prior_std=prior_std,
                          save_ensemble=save_ensemble, nens=nens)
 
-    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=1)
-    assert victim['siteloc'] == goal['siteloc']
-    assert victim['gridloc'] == goal['gridloc']
-    np.testing.assert_allclose(victim['priormean'], goal['priormean'],
+    np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
+    assert victim.location == goal['siteloc']
+    assert victim.modelparam_gridpoints == goal['gridloc']
+    np.testing.assert_allclose(victim.prior_mean, goal['priormean'],
                                atol=1e-5)
-    assert victim['priorstd'] == goal['priorstd']
-    assert victim['predsens'].shape == goal['predsens'].shape
+    assert victim.prior_std == goal['priorstd']
+    assert victim.ensemble.shape == goal['predsens'].shape
 
 
 def test_predict_subt():
@@ -125,7 +133,7 @@ def test_predict_subt():
                                [-11.21444389, -4.82280281, 1.3729362],
                                [-9.55533595, -3.25380571, 2.91106291]]),
             'siteloc': (lat, lon),
-            'gridloc': (-60, -70),
+            'gridloc': [(-60, -70)],
             'priormean': -0.434658923291294,
             'priorstd': 6,
             'predsens': np.ones((5, nens))
@@ -134,13 +142,13 @@ def test_predict_subt():
     victim = predict_subt(dats=proxy_ts, lat=lat, lon=lon, prior_std=prior_std,
                           save_ensemble=save_ensemble, nens=nens)
 
-    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=1)
-    assert victim['siteloc'] == goal['siteloc']
-    assert victim['gridloc'] == goal['gridloc']
-    np.testing.assert_allclose(victim['priormean'], goal['priormean'],
+    np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
+    assert victim.location == goal['siteloc']
+    assert victim.modelparam_gridpoints == goal['gridloc']
+    np.testing.assert_allclose(victim.prior_mean, goal['priormean'],
                                atol=1e-5)
-    assert victim['priorstd'] == goal['priorstd']
-    assert victim['predsens'].shape == goal['predsens'].shape
+    assert victim.prior_std == goal['priorstd']
+    assert victim.ensemble.shape == goal['predsens'].shape
 
 
 def test_predict_seatemp_analog_sst():
@@ -173,14 +181,15 @@ def test_predict_seatemp_analog_sst():
                                     prior_mean=prior_mean, nens=nens,
                                     save_ensemble=save_ensemble)
 
-    np.testing.assert_allclose(victim['preds'], goal['preds'], atol=1)
+    np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
 
-    goal_anloc = [tuple(x) for x in goal['anlocs'][:, ::-1].tolist()]  # Because Im an idiot and wrote lonlat
+    # Because Im stupid and wrote lonlat array above.
+    goal_anloc = [tuple(x) for x in goal['anlocs'][:, ::-1].tolist()]
     goal_anloc.sort()
-    victim_anloc = [tuple(x) for x in victim['anlocs'].tolist()]
+    victim_anloc = victim.analog_gridpoints.copy()
     victim_anloc.sort()
     assert victim_anloc == goal_anloc
 
-    assert victim['priormean'] == goal['priormean']
-    assert victim['priorstd'] == goal['priorstd']
-    assert victim['predsens'].shape == goal['predsens'].shape
+    assert victim.prior_mean == goal['priormean']
+    assert victim.prior_std == goal['priorstd']
+    assert victim.ensemble.shape == goal['predsens'].shape

@@ -189,8 +189,8 @@ class TexObs:
 
         Returns
         -------
-        latlon_match : ndarray
-            A 2d array (nx2) of latlon where matches were found.
+        latlon_match : list
+            An n-length list of latlon tuples where matches were found.
         vals_match : ndarray
             A 1d array (n) of corresponding TEX86 averages from each match.
         """
@@ -213,8 +213,7 @@ class TexObs:
                 inder_g.append(idx)
                 vals_match.append(vals_mean)
 
-        latlon_match = self.locs[inder_g, ::-1]
-
+        latlon_match = [tuple(x) for x in self.locs[inder_g, ::-1].tolist()]
         return latlon_match, np.array(vals_match)
 
 

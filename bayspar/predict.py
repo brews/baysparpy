@@ -9,15 +9,61 @@ from bayspar.observations import get_seatemp, get_tex
 
 @attr.s()
 class Prediction:
-    ensemble = attr.ib()
-    location = attr.ib(default=None, validator=av.optional(av.instance_of(tuple)))
-    modelparam_gridpoints = attr.ib(default=None, validator=av.optional(av.instance_of(list)))
-    analog_gridpoints = attr.ib(default=None, validator=av.optional(av.instance_of(list)))
+    """MCMC prediction
 
-    def percentile(q):
-        """Compute the qth percentile of ensemble.
+    Parameters
+    ----------
+    ensemble : ndarray
+        Ensemble of predictions. A 2d array (nxm) for n predictands and m
+        ensemble members.
+    location : tuple or None, optional
+        Optional tuple of the site location (lat, lon).
+    prior_mean : float or None, optional
+        Prior mean used for the prediction.
+    prior_std : float or None, optional
+        Prior sample standard deviation used for the prediction.
+    modelparam_gridpoints : list of tuples or None, optional
+        A list of one or more (lat, lon) points used to collect
+        spatially-sensitive model parameters.
+    analog_gridpoints : list of tuples or None, optional
+        A list of one or more (lat, lon) points used for an analog prediction.
+    """
+    ensemble = attr.ib(validator=av.optional(av.instance_of(np.ndarray)))
+    location = attr.ib(default=None,
+                       validator=av.optional(av.instance_of(tuple)))
+    prior_mean = attr.ib(default=None)
+    prior_std = attr.ib(default=None)
+    modelparam_gridpoints = attr.ib(default=None,
+                                    validator=av.optional(av.instance_of(list)))
+    analog_gridpoints = attr.ib(default=None,
+                                validator=av.optional(av.instance_of(list)))
+
+    def percentile(self, q=None, interpolation='nearest'):
+        """Compute the qth ranked percentile from ensemble members.
+
+        Parameters
+        ----------
+        q : float ,sequence of floats, or None, optional
+            Percentiles (i.e. [0, 100]) to compute. Default is 5%, 50%, 95%.
+        interpolation : str, optional
+            Passed to numpy.percentile. Default is 'nearest'.
+
+        Returns
+        -------
+        perc : ndarray
+            A 2d (nxm) array of floats where n is the number of predictands in
+            the ensemble and m is the number of percentiles ('len(q)').
         """
-        raise NotImplementedError
+        if q is None:
+            q = [5, 50, 95]
+        q = np.array(q, dtype=np.float64, copy=True)
+
+        # Because analog ensembles have 3 dims
+        target_axis = list(range(self.ensemble.ndim))[1:]
+
+        perc = np.percentile(self.ensemble, q=q, axis=target_axis,
+                             interpolation=interpolation)
+        return perc.T
 
 
 def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
@@ -59,7 +105,6 @@ def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
     assert -90 <= lat <= 90
 
     nd = len(dats)
-    pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens) - 1).astype(int)
 
     draws = get_draws(temptype)
 
@@ -80,16 +125,9 @@ def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
         tex[:, i] = np.random.normal(dats * beta_now + alpha_now,
                                      np.sqrt(tau2_now))
 
-    tex_s = np.sort(tex, axis=1)
-
-    output = {'preds': tex_s[:, pers3],
-              'siteloc': (lat, lon),
-              'gridloc': tuple(grid_latlon),
-              'predsens': None}
-
-    if save_ensemble:
-        output['predsens'] = tex
-
+    output = Prediction(ensemble=tex,
+                        location=(lat, lon),
+                        modelparam_gridpoints=[tuple(grid_latlon)])
     return output
 
 
@@ -181,19 +219,11 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
                                               prior_pars=prior_par)
         # TODO(brews): Consider a progress bar for this loop.
 
-    preds_s = np.sort(preds, axis=1)
-
-    pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens) - 1).astype(int)
-    output = {'preds': preds_s[:, pers3],
-              'siteloc': (lat, lon),
-              'gridloc': tuple(grid_latlon),
-              'priormean': prior_mean,
-              'priorstd': prior_std,
-              'predsens': None}
-
-    if save_ensemble:
-        output['predsens'] = preds
-
+    output = Prediction(ensemble=preds,
+                        location=(lat, lon),
+                        prior_mean=prior_mean,
+                        prior_std=prior_std,
+                        modelparam_gridpoints=[tuple(grid_latlon)])
     return output
 
 
@@ -268,17 +298,8 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=Non
                                                       prior_pars=prior_par)
             # TODO(brews): Consider a progress bar for this loop.
 
-    pers3 = (np.round(np.array([0.05, 0.50, 0.95]) * nens * n_locs_g) - 1).astype(int)
-    preds_stack = np.reshape(preds, (nd, nens * n_locs_g), order='F')
-    preds_s = np.sort(preds_stack, axis=1)
-
-    output = {'preds': preds_s[:, pers3],
-              'anlocs': latlon_match,
-              'priormean': prior_mean,
-              'priorstd': prior_std,
-              'predsens': None}
-
-    if save_ensemble:
-        output['predsens'] = preds
-
+    output = Prediction(ensemble=preds,
+                        prior_mean=prior_mean,
+                        prior_std=prior_std,
+                        analog_gridpoints=latlon_match)
     return output
