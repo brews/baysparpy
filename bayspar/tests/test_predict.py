@@ -35,7 +35,7 @@ def test_predict_tex_sst():
 
 def test_predict_tex_subt():
     # TODO(brews): Need this test.
-    pass
+    NotImplementedError
 
 
 def test_predict_seatemp():
