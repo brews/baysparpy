@@ -1,7 +1,8 @@
-import os.path
 from copy import deepcopy
 from pkgutil import get_data
 from io import BytesIO
+
+import attr
 import numpy as np
 from scipy.io import loadmat
 
@@ -95,13 +96,12 @@ def chord_distance(latlon1, latlon2):
 
     return dists.reshape(m, n)
 
-
+@attr.s
 class SeaTempObs:
     """Observed sea temperature fields as used in calibration
     """
-    def __init__(self, st_obs_ave_vec, locs_st_obs):
-        self.st_obs_ave_vec = np.array(st_obs_ave_vec)
-        self.locs_st_obs = np.array(locs_st_obs)
+    st_obs_ave_vec = attr.ib()
+    locs_st_obs = attr.ib()
 
     def distance_from(self, lat, lon):
         """Chordal distance (km) of observations from latlon
@@ -169,12 +169,12 @@ class SeaTempObs:
         return obs_sorted[msk], d_sorted[msk]
 
 
+@attr.s
 class TexObs:
     """Observed TEX86 values"""
-    def __init__(self, locs, obs_stack, inds_stack):
-        self.locs = np.array(locs)
-        self.obs_stack = np.array(obs_stack)
-        self.inds_stack = np.array(inds_stack)
+    locs = attr.ib()
+    obs_stack = attr.ib()
+    inds_stack = attr.ib()
 
     def find_within_tolerance(self, x, tolerance):
         """Find mean TEX86 observations that are within ± tolerance from x

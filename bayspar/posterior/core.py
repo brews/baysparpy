@@ -2,6 +2,7 @@ import os.path
 from copy import deepcopy
 from pkgutil import get_data
 from io import BytesIO
+import attr
 import numpy as np
 from scipy.io import loadmat
 
@@ -31,19 +32,17 @@ def read_draws(flstr, drawtype):
     return var[varstr_full]
 
 
+@attr.s
 class Draws:
     """Spatially-aware posterior draws
     """
-    def __init__(self, alpha_samples_comp, alpha_samples_field,
-                 beta_samples_comp, beta_samples_field, tau2_samples,
-                 locs_comp):
-        self._half_grid_space = 10
-        self.alpha_samples_comp = np.array(alpha_samples_comp)
-        self.alpha_samples_field = np.array(alpha_samples_field)
-        self.beta_samples_comp = np.array(beta_samples_comp)
-        self.beta_samples_field = np.array(beta_samples_field)
-        self.tau2_samples = np.array(tau2_samples)
-        self.locs_comp = np.array(locs_comp)
+    alpha_samples_comp = attr.ib()
+    alpha_samples_field = attr.ib()
+    beta_samples_comp = attr.ib()
+    beta_samples_field = attr.ib()
+    tau2_samples = attr.ib()
+    locs_comp = attr.ib()
+    _half_grid_space = attr.ib(default=10)
 
     def _index_near(self, lat, lon):
         """Get gridpoint index nearest a lat lon

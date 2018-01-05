@@ -1,8 +1,23 @@
 import numpy as np
+import attr
+import attr.validators as av
 
 from bayspar.utils import target_timeseries_pred
 from bayspar.posterior import get_draws
 from bayspar.observations import get_seatemp, get_tex
+
+
+@attr.s()
+class Prediction:
+    ensemble = attr.ib()
+    location = attr.ib(default=None, validator=av.optional(av.instance_of(tuple)))
+    modelparam_gridpoints = attr.ib(default=None, validator=av.optional(av.instance_of(list)))
+    analog_gridpoints = attr.ib(default=None, validator=av.optional(av.instance_of(list)))
+
+    def percentile(q):
+        """Compute the qth percentile of ensemble.
+        """
+        raise NotImplementedError
 
 
 def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):

@@ -29,7 +29,7 @@ setup(
 
     packages=find_packages(exclude=['docs']),
 
-    install_requires=['numpy', 'scipy', 'matplotlib'],
+    install_requires=['numpy', 'scipy', 'matplotlib', 'attrs'],
     extras_require={
         'test': ['pytest'],
         'doc': ['numpydoc', 'docutils', 'setuptools'],
