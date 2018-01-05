@@ -31,7 +31,8 @@ setup(
 
     install_requires=['numpy', 'scipy', 'matplotlib'],
     extras_require={
-        'test': ['pytest']
+        'test': ['pytest'],
+        'doc': ['numpydoc', 'docutils', 'setuptools'],
         },
 
     package_data={'bayspar': ['posterior/Output_SpatAg_subT/*.mat',
