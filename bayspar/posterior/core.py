@@ -1,24 +1,34 @@
 import os.path
 from copy import deepcopy
+from pkgutil import get_data
+from io import BytesIO
 import numpy as np
 from scipy.io import loadmat
 
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-SUBT_PATH = os.path.join(HERE, 'Output_SpatAg_SST')
-SST_PATH = os.path.join(HERE, 'Output_SpatAg_subT')
+TRANSLATE_VAR = {'sst': 'SST', 'subt': 'subT'}
+
+
+def get_matlab_resource(resource, package='bayspar', **kwargs):
+    """Read flat MATLAB files as package resources, output for Numpy"""
+    with BytesIO(get_data(package, resource)) as fl:
+        data = loadmat(fl, **kwargs)
+    return data
 
 
 def read_draws(flstr, drawtype):
-    """Grab single squeezed array from MATLAB draw file
+    """Grab single squeezed array from package resources
     """
-    flpath = None
-    if drawtype.lower() == 'sst':
-        flpath = os.path.join(SST_PATH, flstr)
-    elif drawtype.lower() == 'subt':
-        flpath = os.path.join(SUBT_PATH, flstr)
-    variable = os.path.splitext(flstr)[0]
-    return loadmat(flpath, squeeze_me=True)[variable]
+    drawtype = drawtype.lower()
+    assert drawtype in ['subt', 'sst']
+
+    var_template = 'posterior/Output_SpatAg_{0}/{1}'
+
+    varstr = TRANSLATE_VAR[drawtype]
+    varstr_full = os.path.splitext(flstr)[0]
+    resource_str = var_template.format(varstr, flstr)
+    var = get_matlab_resource(resource_str, squeeze_me=True)
+    return var[varstr_full]
 
 
 class Draws:

@@ -8,8 +8,8 @@ def test__index_near():
     test_lat = -64.8527
     test_lon = -64.2080
 
-    goal1 = 110
-    goal2 = 114
+    goal1 = 114
+    goal2 = 110
 
     victim1 = get_draws('sst')._index_near(test_lat, test_lon)
     victim2 = get_draws('subt')._index_near(test_lat, test_lon)

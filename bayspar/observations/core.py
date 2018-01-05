@@ -1,46 +1,51 @@
 import os.path
 from copy import deepcopy
+from pkgutil import get_data
+from io import BytesIO
 import numpy as np
 from scipy.io import loadmat
 
 
-HERE = os.path.abspath(os.path.dirname(__file__))
+TRANSLATE_VAR = {'sst': 'SST', 'subt': 'subT'}
+
+
+def get_matlab_resource(resource, package='bayspar', **kwargs):
+    """Read flat MATLAB files as package resources, output for Numpy
+    """
+    with BytesIO(get_data(package, resource)) as fl:
+        data = loadmat(fl, **kwargs)
+    return data
 
 
 def read_seatemp(obstype):
-    """Grab squeezed variable and locs array from sea temperature MATLAB files
+    """Grab squeezed variable & locs array from sea temp package resources
     """
-    assert obstype.lower() in ['subt', 'sst']
-    locs_template = 'locs_woa_1degree_asvec_{}.mat'
-    var_template = 'st_woa_1degree_asvec_{}.mat'
+    obstype = obstype.lower()
+    assert obstype in ['subt', 'sst']
 
-    locs_path = None
-    var_path = None
-    if obstype == 'sst':
-        locs_path = os.path.join(HERE, locs_template.format('SST'))
-        var_path = os.path.join(HERE, var_template.format('SST'))
-    elif obstype == 'subt':
-        locs_path = os.path.join(HERE, locs_template.format('subT'))
-        var_path = os.path.join(HERE, var_template.format('subT'))
+    locs_template = 'observations/locs_woa_1degree_asvec_{0}.mat'
+    var_template = 'observations/st_woa_1degree_asvec_{0}.mat'
 
-    var = loadmat(var_path)['st_obs_ave_vec'].squeeze()
-    locs = loadmat(locs_path)['locs_st_obs'].squeeze()
+    var_str = TRANSLATE_VAR[obstype]
+    locs = get_matlab_resource(locs_template.format(var_str))
+    var = get_matlab_resource(var_template.format(var_str))
 
-    return var, locs
+    var_clean = var['st_obs_ave_vec'].squeeze()
+    locs_clean = locs['locs_st_obs'].squeeze()
+    return var_clean, locs_clean
 
 
 def read_tex(obstype):
-    """Grab squeezed variables array from TEX86 MATLAB files
+    """Grab squeezed variables array from TEX86 package resources
     """
-    var_template = 'Data_Input_SpatAg_{}.mat'
-    var_path = None
-    if obstype == 'sst':
-        var_path = os.path.join(HERE, var_template.format('SST'))
-    elif obstype == 'subt':
-        var_path = os.path.join(HERE, var_template.format('subT'))
-    locs = loadmat(var_path)['Data_Input']['Locs'].squeeze().item()
-    obs_stack = loadmat(var_path)['Data_Input']['Obs_Stack'].squeeze().item()
-    inds_stack = loadmat(var_path)['Data_Input']['Inds_Stack'].squeeze().item()
+    var_template = 'observations/Data_Input_SpatAg_{}.mat'
+
+    var_str = TRANSLATE_VAR[obstype]
+    var = get_matlab_resource(var_template.format(var_str))['Data_Input']
+
+    locs = var['Locs'].squeeze().item()
+    obs_stack = var['Obs_Stack'].squeeze().item()
+    inds_stack = var['Inds_Stack'].squeeze().item()
     return locs, obs_stack, inds_stack
 
 
