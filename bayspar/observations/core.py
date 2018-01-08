@@ -47,7 +47,8 @@ def read_tex(obstype):
     locs = var['Locs'].squeeze().item()
     obs_stack = var['Obs_Stack'].squeeze().item()
     inds_stack = var['Inds_Stack'].squeeze().item()
-    return locs, obs_stack, inds_stack
+    obslocs = np.array([x[...].squeeze() for x in var['ObsLocs'].item().ravel() if x.any()])
+    return locs, obs_stack, inds_stack, obslocs
 
 
 def chord_distance(latlon1, latlon2):
@@ -95,6 +96,7 @@ def chord_distance(latlon1, latlon2):
     dists = 2 * earth_radius * np.sin(half_angles)
 
     return dists.reshape(m, n)
+
 
 @attr.s
 class SeaTempObs:
@@ -175,6 +177,7 @@ class TexObs:
     locs = attr.ib()
     obs_stack = attr.ib()
     inds_stack = attr.ib()
+    obslocs = attr.ib()
 
     def find_within_tolerance(self, x, tolerance):
         """Find mean TEX86 observations that are within ± tolerance from x
