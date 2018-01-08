@@ -21,7 +21,6 @@ def test_predict_tex_sst():
     lat = -79.49700165
     lon = -18.699981690000016
     temptype = 'sst'
-    save_ensemble = True
     nens = 15000
 
     goal = {'preds': np.array([[0.30417229, 0.387622, 0.47020701],
@@ -33,7 +32,7 @@ def test_predict_tex_sst():
             }
 
     victim = predict_tex(dats=proxy_ts, lat=lat, lon=lon, temptype=temptype,
-                         save_ensemble=save_ensemble, nens=nens)
+                         nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=0.25)
     assert victim.location == goal['siteloc']
@@ -55,7 +54,6 @@ def test_predict_seatemp():
     lat = -64.8527
     lon = -64.2080
     temptype = 'subt'
-    save_ensemble = True
     nens = 15000
 
     goal = {'preds': np.array([[-11.23432951, -5.01136252, 1.13921719],
@@ -71,8 +69,7 @@ def test_predict_seatemp():
             }
 
     victim = predict_seatemp(dats=proxy_ts, lat=lat, lon=lon,
-                             prior_std=prior_std, temptype=temptype,
-                             save_ensemble=save_ensemble, nens=nens)
+                             prior_std=prior_std, temptype=temptype, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
     assert victim.location == goal['siteloc']
@@ -90,7 +87,6 @@ def test_predict_sst():
     prior_std = 6
     lat = -64.8527
     lon = -64.2080
-    save_ensemble = True
     nens = 15000
 
     goal = {'preds': np.array([[-11.23432951, -5.01136252, 1.13921719],
@@ -106,7 +102,7 @@ def test_predict_sst():
             }
 
     victim = predict_sst(dats=proxy_ts, lat=lat, lon=lon, prior_std=prior_std,
-                         save_ensemble=save_ensemble, nens=nens)
+                         nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
     assert victim.location == goal['siteloc']
@@ -124,7 +120,6 @@ def test_predict_subt():
     prior_std = 6
     lat = -64.8527
     lon = -64.2080
-    save_ensemble = True
     nens = 15000
 
     goal = {'preds': np.array([[-11.23432951, -5.01136252, 1.13921719],
@@ -139,8 +134,7 @@ def test_predict_subt():
             'predsens': np.ones((5, nens))
             }
 
-    victim = predict_subt(dats=proxy_ts, lat=lat, lon=lon, prior_std=prior_std,
-                          save_ensemble=save_ensemble, nens=nens)
+    victim = predict_subt(dats=proxy_ts, lat=lat, lon=lon, prior_std=prior_std, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
     assert victim.location == goal['siteloc']
@@ -158,7 +152,6 @@ def test_predict_seatemp_analog_sst():
     temptype = 'sst'
     prior_std = 20
     prior_mean = 30
-    save_ensemble = True
     nens = 15000
     search_tol = np.std(proxy_ts, ddof=1) * 2
 
@@ -178,8 +171,7 @@ def test_predict_seatemp_analog_sst():
     victim = predict_seatemp_analog(dats=proxy_ts, prior_std=prior_std,
                                     temptype=temptype,
                                     search_tol=search_tol,
-                                    prior_mean=prior_mean, nens=nens,
-                                    save_ensemble=save_ensemble)
+                                    prior_mean=prior_mean, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
 
