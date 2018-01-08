@@ -3,3 +3,4 @@ matplotlib>=2.0
 scipy>=1.0
 pytest>=3.3
 attrs
+cartopy

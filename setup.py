@@ -29,7 +29,7 @@ setup(
 
     packages=find_packages(exclude=['docs']),
 
-    install_requires=['numpy', 'scipy', 'matplotlib', 'attrs'],
+    install_requires=['numpy', 'scipy', 'matplotlib', 'attrs', 'cartopy'],
     extras_require={
         'test': ['pytest'],
         'doc': ['numpydoc', 'docutils', 'setuptools'],
