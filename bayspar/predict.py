@@ -66,7 +66,7 @@ class Prediction:
         return perc.T
 
 
-def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
+def predict_tex(dats, lat, lon, temptype, nens=5000):
     """Predict TEX86 from sea temperature
 
     Parameters
@@ -82,9 +82,6 @@ def predict_tex(dats, lat, lon, temptype, nens=5000, save_ensemble=False):
         Type of sea temperature used. Either 'sst' for sea-surface or 'subt'.
     nens : int
         Size of MCMC ensemble draws to use for calculation.
-    save_ensemble : bool
-        Should the entire MCMC ensemble be returned? If not then just
-        percentiles.
 
     Returns
     -------
@@ -143,7 +140,7 @@ def predict_subt(*args, **kwargs):
     return predict_seatemp(*args, temptype='subt', **kwargs)
 
 
-def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000, save_ensemble=False):
+def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000):
     """Predict sea temperature with TEX86
 
     Parameters
@@ -163,9 +160,6 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
         by searching for a "close" value in observed sea temperature records.
     nens : int
         Size of MCMC ensemble draws to use for calculation.
-    save_ensemble : bool
-        Should the entire MCMC ensemble be returned? If not, then just
-        percentiles.
 
     Returns
     -------
@@ -227,7 +221,7 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
     return output
 
 
-def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=None, nens=5000, save_ensemble=False):
+def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=None, nens=5000):
     """Predict sea temperature with TEX86, using the analog method
 
     Parameters
