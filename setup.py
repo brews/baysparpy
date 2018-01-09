@@ -37,5 +37,6 @@ setup(
 
     package_data={'bayspar': ['modelparams/Output_SpatAg_subT/*.mat',
                               'modelparams/Output_SpatAg_SST/*.mat',
-                              'observations/*.mat']},
+                              'observations/*.mat',
+                              'example_data/*.csv']},
 )

@@ -1,3 +1,6 @@
+import os
+import pkgutil
+import io
 import numpy as np
 
 
@@ -39,3 +42,19 @@ def target_timeseries_pred(alpha_now, beta_now, tau2_now, proxy_ts, prior_pars):
     timeseries_pred = mean_full + sqrt_post_cov @ np.random.randn(n_ts).T
 
     return timeseries_pred
+
+
+def get_example_data(filename):
+    """Get a BytesIO object for a bayspar example file.
+
+    Parameters
+    ----------
+    filename : str
+        File to load.
+
+    Returns
+    -------
+    BytesIO of the example file.
+    """
+    resource_str = os.path.join('example_data', filename)
+    return io.BytesIO(pkgutil.get_data('bayspar', resource_str))
