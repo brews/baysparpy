@@ -17,6 +17,9 @@ Prediction
 Creating a prediction
 ---------------------
 
+.. autosummary::
+   :toctree: generated/
+
    predict_seatemp
    predict_seatemp_analog
    predict_tex
