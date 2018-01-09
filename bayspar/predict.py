@@ -128,18 +128,6 @@ def predict_tex(dats, lat, lon, temptype, nens=5000):
     return output
 
 
-def predict_sst(*args, **kwargs):
-    """Predict sea-surface temperature with TEX86
-    """
-    return predict_seatemp(*args, temptype='sst', **kwargs)
-
-
-def predict_subt(*args, **kwargs):
-    """Predict sub-surface sea temperature with TEX86
-    """
-    return predict_seatemp(*args, temptype='subt', **kwargs)
-
-
 def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000):
     """Predict sea temperature with TEX86
 
