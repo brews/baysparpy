@@ -23,7 +23,7 @@ def read_draws(flstr, drawtype):
     drawtype = drawtype.lower()
     assert drawtype in ['subt', 'sst']
 
-    var_template = 'posterior/Output_SpatAg_{0}/{1}'
+    var_template = 'modelparams/Output_SpatAg_{0}/{1}'
 
     varstr = TRANSLATE_VAR[drawtype]
     varstr_full = os.path.splitext(flstr)[0]
@@ -34,7 +34,7 @@ def read_draws(flstr, drawtype):
 
 @attr.s
 class Draws:
-    """Spatially-aware posterior draws
+    """Spatially-aware modelparams draws
     """
     alpha_samples_comp = attr.ib()
     alpha_samples_field = attr.ib()

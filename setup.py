@@ -35,7 +35,7 @@ setup(
         'doc': ['numpydoc', 'docutils', 'setuptools'],
         },
 
-    package_data={'bayspar': ['posterior/Output_SpatAg_subT/*.mat',
-                              'posterior/Output_SpatAg_SST/*.mat',
+    package_data={'bayspar': ['modelparams/Output_SpatAg_subT/*.mat',
+                              'modelparams/Output_SpatAg_SST/*.mat',
                               'observations/*.mat']},
 )

@@ -3,7 +3,7 @@ import attr
 import attr.validators as av
 
 from bayspar.utils import target_timeseries_pred
-from bayspar.posterior import get_draws
+from bayspar.modelparams import get_draws
 from bayspar.observations import get_seatemp, get_tex
 
 
@@ -176,7 +176,7 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
     # TODO(brews): trim tau**2 (may not have burnin) ln 92 of bayspar_tex.m
     ntk = draws.alpha_samples_comp.shape[1]
     assert ntk > nens
-    # TODO(brews): trim posterior draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
+    # TODO(brews): trim modelparams draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
 
     nd = len(dats)
 
@@ -254,7 +254,7 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=Non
     # TODO(brews): trim tau**2 (may not have burnin) ln 92 of bayspar_tex.m
     ntk = draws.alpha_samples_comp.shape[1]
     assert ntk > nens
-    # TODO(brews): trim posterior draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
+    # TODO(brews): trim modelparams draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
 
     nd = len(dats)
 

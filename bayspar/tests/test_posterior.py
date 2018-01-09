@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from bayspar.posterior import get_draws
+from bayspar.modelparams import get_draws
 
 
 def test__index_near():
