@@ -1,0 +1,15 @@
+name: baysparpy-docs
+channels:
+- conda-forge
+- defaults
+dependencies:
+- attrs
+- cartopy
+- docutils
+- matplotlib>=2.0
+- numpy
+- numpydoc
+- pytest
+- python=3.6
+- scipy>=1.0
+- setuptools

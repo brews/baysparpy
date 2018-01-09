@@ -1,0 +1,15 @@
+name: test_env
+channels:
+- conda-forge
+- defaults
+dependencies:
+- attrs
+- cartopy
+- coverage
+- docutils
+- matplotlib>=2.0
+- numpy
+- pytest
+- python=3.5
+- scipy>=1.0
+- tox
