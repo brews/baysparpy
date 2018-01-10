@@ -31,17 +31,25 @@ Blah blah.
 
 .. ipython:: python
 
-    prediction = bsr.predict_seatemp(d['tex86'], lon=34.0733, lat=31.6517,
-                                     prior_std=6, temptype='subt', nens=200)
+    prediction = bsr.predict_seatemp(d['tex86'], lon=-64.2080, lat=-64.8527,
+                                     prior_std=6, temptype='sst', nens=200)
 
 Blah blah.
 
 .. ipython:: python
 
-    @savefig predict_plot.png width=4in
-    ax = bsr.plot.plot_series(prediction, x=d['age'], xlabel='Age',
-                              ylabel='Temperature (°C)')
-    ax.grid(True)
+    @savefig predictplot_shevenell_rough.png width=4in
+    bsr.predictplot(prediction)
+
+Blah blah blah BLAH.
+
+.. ipython:: python
+
+    ax = bsr.predictplot(prediction, x=d['age'], xlabel='Age',
+                              ylabel='SST (°C)')
+    ax.grid()
+    @savefig predictplot_shevenell_pretty.png width=4in
+    ax.legend()
 
 
 Analog prediction
@@ -49,7 +57,7 @@ Analog prediction
 
 Blah blah.
 
-"Forward" prediction
---------------------
+Forward prediction
+------------------
 
 Blah blah.
