@@ -64,7 +64,7 @@ def get_grid_corners(latlons, halfgrid=10):
     return ys, xs
 
 
-def plot_series(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, ax=None):
+def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, ax=None):
     if ax is None:
         ax = plt.gca()
     if x is None:
@@ -74,8 +74,8 @@ def plot_series(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, a
                     label='90% probability', color='C0')
     ax.plot(x, perc[:, 1], label='Median', color='C0')
     if prediction.prior_mean is not None:
-        ax.axhline(prediction.prior_mean, label='Prior mean', linestyle='dashed',
-                   color='C1')
+        ax.axhline(prediction.prior_mean, label='Prior mean',
+                   linestyle='dashed', color='C1')
     if spaghetti:
         n = 100
         shp = prediction.ensemble.shape
@@ -91,3 +91,7 @@ def plot_series(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, a
     if xlabel is not None:
         ax.set_xlabel(xlabel)
     return ax
+
+
+def analogmap():
+    raise NotImplementedError
