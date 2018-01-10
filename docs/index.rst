@@ -23,10 +23,10 @@ Documentation
 .. toctree::
    :maxdepth: 1
 
+   overview
    whats_new
    examples
    installing
-   plots
    api
 
 See also

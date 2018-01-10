@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # baysparpy documentation build configuration file, created by
@@ -20,7 +20,25 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('..'))
+import sys
+import os
+import datetime
+import importlib
+
+print("python exec:", sys.executable)
+print("sys.path:", sys.path)
+for name in ('numpy scipy matplotlib IPython cartopy').split():
+    try:
+        module = importlib.import_module(name)
+        if name == 'matplotlib':
+            module.use('Agg')
+        fname = module.__file__.rstrip('__init__.py')
+        print("%s: %s, %s" % (name, module.__version__, fname))
+    except ImportError:
+        print("no %s" % name)
+
+# import bayspar
+# print("bayspar: %s, %s" % (bayspar.__version__, bayspar.__file__))
 
 
 # -- General configuration ------------------------------------------------
@@ -39,6 +57,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'sphinx.ext.autodoc',
               'numpydoc',
+              'IPython.sphinxext.ipython_directive',
+              'IPython.sphinxext.ipython_console_highlighting',
               ]
 
 extlinks = {'issue': ('https://github.com/brews/baysparpy/issues/%s', 'GH'),
