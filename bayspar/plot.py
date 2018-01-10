@@ -67,15 +67,22 @@ def get_grid_corners(latlons, halfgrid=10):
 def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, ax=None):
     if ax is None:
         ax = plt.gca()
+
     if x is None:
         x = list(range(len(prediction.ensemble)))
+
     perc = prediction.percentile(q=[5, 50, 95])
+
     ax.fill_between(x, perc[:, 0], perc[:, 2], alpha=0.25,
-                    label='90% probability', color='C0')
+                    label='90% uncertainty', color='C0')
+
     ax.plot(x, perc[:, 1], label='Median', color='C0')
+    ax.plot(x, perc[:, 1], marker='.', color='C0')
+
     if prediction.prior_mean is not None:
         ax.axhline(prediction.prior_mean, label='Prior mean',
                    linestyle='dashed', color='C1')
+
     if spaghetti:
         n = 100
         shp = prediction.ensemble.shape
@@ -86,10 +93,12 @@ def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, a
             assert shp[1] * shp[2] >= n
             ax.plot(x, prediction.ensemble.reshape(shp[0], shp[1] * shp[2])[:, -n:],
                     alpha=0.1, color='black')
+
     if ylabel is not None:
         ax.set_ylabel(ylabel)
     if xlabel is not None:
         ax.set_xlabel(xlabel)
+
     return ax
 
 
