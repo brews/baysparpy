@@ -6,6 +6,7 @@ dependencies:
 - attrs
 - cartopy
 - docutils
+- ipython
 - matplotlib>=2.0
 - numpy
 - numpydoc
