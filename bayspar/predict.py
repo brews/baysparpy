@@ -16,6 +16,8 @@ class Prediction:
     ensemble : ndarray
         Ensemble of predictions. A 2d array (nxm) for n predictands and m
         ensemble members.
+    temptype : str
+        Type of sea temperature used for prediction.
     location : tuple or None, optional
         Optional tuple of the site location (lat, lon).
     prior_mean : float or None, optional
@@ -28,6 +30,7 @@ class Prediction:
     analog_gridpoints : list of tuples or None, optional
         A list of one or more (lat, lon) points used for an analog prediction.
     """
+    temptype = attr.ib()
     ensemble = attr.ib(validator=av.optional(av.instance_of(np.ndarray)))
     location = attr.ib(default=None,
                        validator=av.optional(av.instance_of(tuple)))
@@ -123,6 +126,7 @@ def predict_tex(dats, lat, lon, temptype, nens=5000):
                                      np.sqrt(tau2_now))
 
     output = Prediction(ensemble=tex,
+                        temptype=temptype,
                         location=(lat, lon),
                         modelparam_gridpoints=[tuple(grid_latlon)])
     return output
@@ -202,6 +206,7 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
         # TODO(brews): Consider a progress bar for this loop.
 
     output = Prediction(ensemble=preds,
+                        temptype=temptype,
                         location=(lat, lon),
                         prior_mean=prior_mean,
                         prior_std=prior_std,
@@ -281,6 +286,7 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=Non
             # TODO(brews): Consider a progress bar for this loop.
 
     output = Prediction(ensemble=preds,
+                        temptype=temptype,
                         prior_mean=prior_mean,
                         prior_std=prior_std,
                         analog_gridpoints=latlon_match)

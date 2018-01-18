@@ -6,7 +6,8 @@ from bayspar.predict import (Prediction, predict_seatemp, predict_tex,
 
 
 def test_percentile():
-    prediction_test = Prediction(ensemble=np.array([range(10), range(10)]))
+    prediction_test = Prediction(ensemble=np.array([range(10), range(10)]),
+                                 temptype='sst')
     victim = prediction_test.percentile()
     goal = np.array([[0, 0], [4, 4], [9, 9]]).T
     np.testing.assert_equal(victim, goal)
