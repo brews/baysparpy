@@ -14,7 +14,7 @@ def map_texobs(ax=None, texobs=None, obstype=None):
         ax.coastlines()
 
     ax.scatter(texobs.obslocs[:, 0], texobs.obslocs[:, 1], marker='.',
-               transform=ccrs.Geodetic(), label=r'$TEX_{86} obs', zorder=3)
+               transform=ccrs.Geodetic(), label=r'$TEX_{86}$ obs', zorder=3)
     return ax
 
 
