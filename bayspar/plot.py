@@ -57,8 +57,8 @@ def map_site(prediction, latlon=None, ax=None):
     if ax is None:
         ax = _default_map_ax()
 
-    ax.plot(latlon[1], latlon[0], marker='^', transform=ccrs.Geodetic(),
-            label='Prediction', color='C1', zorder=4)
+    ax.plot(latlon[1], latlon[0], marker='^', linestyle='None',
+            transform=ccrs.Geodetic(), label='Prediction', color='C1', zorder=5)
     return ax
 
 
@@ -70,8 +70,7 @@ def map_analog_boxes(prediction, ax=None):
 
     ys, xs = get_grid_corners(prediction.analog_gridpoints)
     for y, x in zip(ys, xs):
-        ax.plot(x, y, transform=ccrs.PlateCarree(), color='black',
-                label='Analog gridpoint')
+        ax.plot(x, y, transform=ccrs.PlateCarree(), color='black', zorder=4)
 
     return ax
 
