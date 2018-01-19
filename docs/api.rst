@@ -23,3 +23,14 @@ Creating a prediction
    predict_seatemp
    predict_seatemp_analog
    predict_tex
+
+Plots & Graphics
+================
+
+.. autosummary::
+   :toctree: generated/
+
+   predictplot
+   analogmap
+
+
