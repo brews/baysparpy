@@ -5,6 +5,33 @@ import cartopy.feature as cfeature
 from bayspar.observations import get_tex
 
 
+def _default_map_ax(gca_kws=None, add_feature_kws=None):
+    """Create default `matplotlib.Axes` instance for maps
+
+    Parameters
+    ----------
+    gca_kws: dict, optional
+        Keyword args passed to `matplotlib.gca()`.
+    add_feature_kws: dict, optional
+        Keyword args passed to `ax.addfeature()`.
+
+    Returns
+    -------
+    ax: matplotlib.Axes instance.
+    """
+    if gca_kws is None:
+        gca_kws = {'projection': ccrs.Robinson(central_longitude=0)}
+
+    if add_feature_kws is None:
+        add_feature_kws = {'feature': cfeature.LAND,
+                           'facecolor': '#B0B0B0'}
+
+    ax = plt.gca(**gca_kws)
+    ax.add_feature(**add_feature_kws)
+
+    return ax
+
+
 def map_texobs(ax=None, texobs=None, obstype=None):
     """Plot a map of TEX86 observations
     """
@@ -12,8 +39,7 @@ def map_texobs(ax=None, texobs=None, obstype=None):
         texobs = get_tex(obstype)
 
     if ax is None:
-        ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
+        ax = _default_map_ax()
 
     ax.scatter(texobs.obslocs[:, 0], texobs.obslocs[:, 1], marker='.',
                transform=ccrs.Geodetic(), label=r'$TEX_{86}$ obs', zorder=3)
@@ -29,8 +55,7 @@ def map_site(prediction, latlon=None, ax=None):
         latlon = prediction.location
 
     if ax is None:
-        ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
+        ax = _default_map_ax()
 
     ax.plot(latlon[1], latlon[0], marker='^', transform=ccrs.Geodetic(),
             label='Prediction', color='C1', zorder=4)
@@ -41,8 +66,7 @@ def map_analog_boxes(prediction, ax=None):
     """Plot map of grids used for analog prediction
     """
     if ax is None:
-        ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
+        ax = _default_map_ax()
 
     ys, xs = get_grid_corners(prediction.analog_gridpoints)
     for y, x in zip(ys, xs):
@@ -111,14 +135,13 @@ def analogmap(prediction, latlon=None, ax=None):
     """Map analog prediction with grids used for analog and TEX86 sites
     """
     if ax is None:
-        ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
+        ax = _default_map_ax()
 
     ax = map_texobs(obstype=prediction.temptype, ax=ax)
 
     if latlon is not None:
         ax = map_site(prediction, latlon=latlon, ax=ax)
 
-    ax = map_analog_boxes(prediction, ax=None)
+    ax = map_analog_boxes(prediction, ax=ax)
 
     return ax
