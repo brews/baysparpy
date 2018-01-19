@@ -44,7 +44,8 @@ def map_analog_boxes(prediction, ax=None):
 
     ys, xs = get_grid_corners(prediction.analog_gridpoints)
     for y, x in zip(ys, xs):
-        ax.plot(x, y, transform=ccrs.PlateCarree(), color='black')
+        ax.plot(x, y, transform=ccrs.PlateCarree(), color='black',
+                label='Analog gridpoint')
 
     return ax
 
