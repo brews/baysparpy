@@ -13,3 +13,4 @@ dependencies:
 - python=3.5
 - scipy>=1.0
 - tox
+- tqdm

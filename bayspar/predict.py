@@ -1,6 +1,7 @@
 import numpy as np
 import attr
 import attr.validators as av
+from tqdm import tqdm
 
 from bayspar.utils import target_timeseries_pred
 from bayspar.modelparams import get_draws
@@ -214,7 +215,8 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
     return output
 
 
-def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=None, nens=5000):
+def predict_seatemp_analog(dats, prior_std, temptype, search_tol,
+                           prior_mean=None, nens=5000, progressbar=True):
     """Predict sea temperature with TEX86, using the analog method
 
     Parameters
@@ -235,6 +237,9 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=Non
     save_ensemble : bool
         Should the entire MCMC ensemble be returned? If not, then just
         percentiles.
+    progressbar: bool
+        Whether or not to display a progress bar on the command line. The bar
+        shows how many analogs have been completed.
 
     Returns
     -------
@@ -271,8 +276,15 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=Non
     prior_par = {'mu': np.ones(nd) * prior_mean,
                  'inv_cov': np.eye(nd) * prior_std ** -2}
 
+    n_latlon_matches = len(latlon_match)
+    indices = range(n_latlon_matches)
+
+    if progressbar:
+        indices = tqdm(indices, total=n_latlon_matches)
+
     preds = np.empty((nd, n_locs_g, nens))
-    for kk, latlon in enumerate(latlon_match):
+    for kk in indices:
+        latlon = latlon_match[kk]
         alpha_samples, beta_samples = draws.find_alphabeta_near(*latlon)
         for jj in range(nens):
             a_now = alpha_samples[jj]
@@ -283,7 +295,6 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol, prior_mean=Non
                                                       tau2_now=t2_now,
                                                       proxy_ts=dats,
                                                       prior_pars=prior_par)
-            # TODO(brews): Consider a progress bar for this loop.
 
     output = Prediction(ensemble=preds,
                         temptype=temptype,

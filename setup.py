@@ -29,7 +29,7 @@ setup(
 
     packages=find_packages(exclude=['docs']),
 
-    install_requires=['numpy', 'scipy', 'matplotlib', 'attrs'],
+    install_requires=['numpy', 'scipy', 'matplotlib', 'attrs', 'tqdm'],
     tests_require=['pytest'],
     package_data={'bayspar': ['modelparams/Output_SpatAg_subT/*.mat',
                               'modelparams/Output_SpatAg_SST/*.mat',
