@@ -66,6 +66,8 @@ def get_grid_corners(latlons, halfgrid=10):
 
 
 def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, ax=None):
+    """Lineplot of prediction with uncertainty estimate
+    """
     if ax is None:
         ax = plt.gca()
 
