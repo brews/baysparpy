@@ -1,5 +1,7 @@
 import matplotlib.pylab as plt
 import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+
 from bayspar.observations import get_tex
 
 
@@ -11,7 +13,7 @@ def map_texobs(ax=None, texobs=None, obstype=None):
 
     if ax is None:
         ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.coastlines()
+        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
 
     ax.scatter(texobs.obslocs[:, 0], texobs.obslocs[:, 1], marker='.',
                transform=ccrs.Geodetic(), label=r'$TEX_{86}$ obs', zorder=3)
@@ -28,7 +30,7 @@ def map_site(prediction, latlon=None, ax=None):
 
     if ax is None:
         ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.coastlines()
+        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
 
     ax.plot(latlon[1], latlon[0], marker='^', transform=ccrs.Geodetic(),
             label='Prediction', color='C1', zorder=4)
@@ -40,7 +42,7 @@ def map_analog_boxes(prediction, ax=None):
     """
     if ax is None:
         ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.coastlines()
+        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
 
     ys, xs = get_grid_corners(prediction.analog_gridpoints)
     for y, x in zip(ys, xs):
@@ -110,7 +112,7 @@ def analogmap(prediction, latlon=None, ax=None):
     """
     if ax is None:
         ax = plt.gca(projection=ccrs.Robinson(central_longitude=0))
-        ax.coastlines(color='#7f7f7f')
+        ax.add_feature(cfeature.LAND, facecolor='#B0B0B0')
 
     ax = map_texobs(obstype=prediction.temptype, ax=ax)
 
