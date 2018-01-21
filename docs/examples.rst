@@ -100,7 +100,8 @@ We can run an "analog" prediction of sea temperature with :py:func:`predict_seat
 
     prediction = bsr.predict_seatemp_analog(d['tex86'], temptype='sst',
                                             prior_mean=30, prior_std=20,
-                                            search_tol=search_tolerance)
+                                            search_tol=search_tolerance,
+                                            nens=500)
 
 Blah blah, what is an analog prediction, talk about the above function run. We
 get a prediction object out of it. Beware (note) that it can be slow if many
