@@ -34,4 +34,5 @@ Plots & Graphics
    :toctree: generated/
 
    predictplot
+   densityplot
    analogmap

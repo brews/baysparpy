@@ -72,11 +72,22 @@ modify the plot as needed:
     @savefig predictplot_castaneda_pretty.png width=4in
     ax.legend()
 
+In much the same way, we can view the distribution of the prediction prior and posterior with :py:func:`densityplot':
+
+.. ipython:: python
+
+    ax = bsr.densityplot(prediction,
+                         x=np.arange(1, 40, 0.1),
+                         xlabel='SST (°C)')
+    ax.grid(axis='x')
+    @savefig densityplot_castaneda_pretty.png width=4in
+    ax.legend()
+
 
 Analog prediction
 -----------------
 
-Begin by loading the example data:
+Begin by loading the example data for a "Deep-Time" analog prediction:
 
 .. ipython:: python
 
