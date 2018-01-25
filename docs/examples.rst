@@ -9,7 +9,7 @@ Examples
 
    The project is under heavy development. Code and documentation are not complete.
 
-Here are some quick examples. To start things off, import a few basic
+To start things off, import a few basic
 tools, including `bayspar`:
 
 .. ipython:: python
