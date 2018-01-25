@@ -44,7 +44,7 @@ def map_texobs(ax=None, texobs=None, obstype=None):
         ax = _default_map_ax()
 
     ax.scatter(texobs.obslocs[:, 0], texobs.obslocs[:, 1], marker='.',
-               transform=ccrs.Geodetic(), label=r'$TEX_{86}$ obs', zorder=3)
+               transform=ccrs.Geodetic(), label=r'TEX$_{86}$ obs', zorder=3)
     return ax
 
 
