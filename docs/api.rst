@@ -4,7 +4,8 @@
 API reference
 #############
 
-This page is an auto-generated summary of baysparpy's API.
+This page is an auto-generated summary of the **baysparpy** API.
+
 
 Prediction
 ==========
@@ -13,6 +14,7 @@ Prediction
    :toctree: generated/
 
    predict.Prediction
+
 
 Creating a prediction
 ---------------------
@@ -24,6 +26,7 @@ Creating a prediction
    predict_seatemp_analog
    predict_tex
 
+
 Plots & Graphics
 ================
 
@@ -32,5 +35,3 @@ Plots & Graphics
 
    predictplot
    analogmap
-
-
