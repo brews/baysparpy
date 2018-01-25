@@ -41,7 +41,7 @@ has two columns giving sediment age (calendar years BP) and TEX\ :sub:`86`.
     d['age'][:5]
     d['tex86'][:5]
 
-We can make a "standard" prediction of sea temperature with :py:func:`predict_seatemp`:
+We can make a "standard" prediction of sea-surface temperature (SST) with :py:func:`predict_seatemp`:
 
 .. ipython:: python
 
@@ -50,7 +50,7 @@ We can make a "standard" prediction of sea temperature with :py:func:`predict_se
 
 The TEX\ :sub:`86` data and site position are passed to the prediction
 function. Additionally, we give standard deviation for the prior
-sea-temperature distribution. We also specify that sea-surface temperatures are
+SST distribution. We also specify that SST are
 the target variable. A :py:class:`~predict.Prediction` instance is returned,
 which we can poked and prod with direct queries or with a few built-in
 functions:
@@ -103,7 +103,7 @@ columns giving depth (m) and TEX\ :sub:`86`:
     d['depth'][:5]
     d['tex86'][:5]
 
-We can run an "analog" prediction of sea temperature with :py:func:`predict_seatemp`:
+We can run an "analog" prediction of SST with :py:func:`predict_seatemp`:
 
 .. ipython:: python
 
@@ -140,4 +140,27 @@ Blah blah blah blah.
 Forward prediction
 ------------------
 
-Blah blah.
+For this example, we make inferences about TEX\ :sub:`86` from SST data using a
+forward-model prediction. We start by creating a SST series spanning from 0 - 40 °C:
+
+.. ipython:: python
+
+    sst = np.arange(0, 41)
+
+And now plug the SST data into :py:func:`predict_tex` along with additional information - we're using the same site location as in `Standard prediction`_:
+
+.. ipython:: python
+
+    prediction = bsr.predict_tex(sst, lon=34.0733, lat=31.6517, temptype='sst')
+
+As might be expected, we can now use the output of the forward prediction to parse and plot:
+
+.. ipython:: python
+
+    ax = bsr.predictplot(prediction, x=sst,
+                         xlabel='SST (°C)',
+                         ylabel=r'TEX$_{86}$')
+    ax.grid()
+    @savefig predictplot_forward_pretty.png width=4in
+    ax.legend()
+

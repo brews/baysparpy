@@ -4,7 +4,7 @@
 API reference
 #############
 
-This page is an auto-generated summary of the **baysparpy** API.
+This page is summary of the **baysparpy** API.
 
 
 Prediction
