@@ -1,4 +1,7 @@
 
+.. image:: _static/bayspar-logo.png
+   :width: 300 px
+   :align: center
 
 |
 
