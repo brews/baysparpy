@@ -30,10 +30,10 @@ returned stream with :py:func:`pandas.read_csv` or :py:func:`numpy.genfromtxt`:
 
 .. ipython:: python
 
-    example_file = bsr.get_example_data('shevenell2011.csv')
+    example_file = bsr.get_example_data('castaneda2010.csv')
     d = np.genfromtxt(example_file, delimiter=',', names=True)
 
-This dataset (from `Shevenell et al. 2011 <https://doi.org/10.1594/PANGAEA.769699>`_)
+This dataset (from `Castañeda et al. 2010 <https://doi.org/10.1029/2009PA001740>`_)
 has two columns giving sediment age (calendar years BP) and TEX\ :sub:`86`.
 
 .. ipython:: python
@@ -45,10 +45,10 @@ We can make a "standard" prediction of sea temperature with :py:func:`predict_se
 
 .. ipython:: python
 
-    prediction = bsr.predict_seatemp(d['tex86'], lon=-64.2080, lat=-64.8527,
+    prediction = bsr.predict_seatemp(d['tex86'], lon=34.0733, lat=31.6517,
                                      prior_std=6, temptype='sst')
 
-Here, the TEX\ :sub:`86` data and site position are passed to the prediction
+The TEX\ :sub:`86` data and site position are passed to the prediction
 function. Additionally, we give standard deviation for the prior
 sea-temperature distribution. We also specify that sea-surface temperatures are
 the target variable. A :py:class:`~predict.Prediction` instance is returned,
@@ -57,7 +57,7 @@ functions:
 
 .. ipython:: python
 
-    @savefig predictplot_shevenell_rough.png width=4in
+    @savefig predictplot_castaneda_rough.png width=4in
     bsr.predictplot(prediction)
 
 You might have noticed that :py:func:`predictplot` returns an
@@ -69,7 +69,7 @@ modify the plot as needed:
     ax = bsr.predictplot(prediction, x=d['age'], xlabel='Age',
                          ylabel='SST (°C)')
     ax.grid()
-    @savefig predictplot_shevenell_pretty.png width=4in
+    @savefig predictplot_castaneda_pretty.png width=4in
     ax.legend()
 
 
