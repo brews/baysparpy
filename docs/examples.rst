@@ -147,7 +147,8 @@ forward-model prediction. We start by creating a SST series spanning from 0 - 40
 
     sst = np.arange(0, 41)
 
-And now plug the SST data into :py:func:`predict_tex` along with additional information - we're using the same site location as in `Standard prediction`_:
+And now plug the SST data into :py:func:`predict_tex` along with additional information.
+In this case we're using the same site location as in `Standard prediction`_:
 
 .. ipython:: python
 
