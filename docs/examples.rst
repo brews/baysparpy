@@ -100,14 +100,14 @@ See the :py:meth:`~predict.Prediction.percentile` method for more options.
 Analog prediction
 -----------------
 
-Begin by loading the example data for a "Deep-Time" analog prediction:
+Begin by loading data for a "Deep-Time" analog prediction:
 
 .. ipython:: python
 
     example_file = bsr.get_example_data('wilsonlake.csv')
     d = np.genfromtxt(example_file, delimiter=',', names=True)
 
-This dataset is a TEX86 record from record from Wilson Lake, New Jersey
+This dataset is a TEX\ :sub:`86` record from record from Wilson Lake, New Jersey
 (`Zachos et al. 2006 <https://doi.org/10.1130/G22522.1>`_). The file has two
 columns giving depth (m) and TEX\ :sub:`86`:
 
@@ -116,7 +116,7 @@ columns giving depth (m) and TEX\ :sub:`86`:
     d['depth'][:5]
     d['tex86'][:5]
 
-We can run an "analog" prediction of SST with :py:func:`predict_seatemp`:
+We can run the analog prediction of SST with :py:func:`predict_seatemp_analog`:
 
 .. ipython:: python
 
@@ -167,7 +167,7 @@ In this case we're using the same site location as in `Standard prediction`_:
 
     prediction = bsr.predict_tex(sst, lon=34.0733, lat=31.6517, temptype='sst')
 
-As might be expected, we can now use the output of the forward prediction to parse and plot:
+As might be expected, we can use the output of the forward prediction to parse and plot:
 
 .. ipython:: python
 
