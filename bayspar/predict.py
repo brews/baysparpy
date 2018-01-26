@@ -70,12 +70,12 @@ class Prediction:
         return perc.T
 
 
-def predict_tex(dats, lat, lon, temptype, nens=5000):
+def predict_tex(seatemp, lat, lon, temptype, nens=5000):
     """Predict TEX86 from sea temperature
 
     Parameters
     ----------
-    dats : ndarray
+    seatemp : ndarray
         n-length array of sea temperature observations (°C) from a single
         location.
     lat : float
@@ -105,7 +105,7 @@ def predict_tex(dats, lat, lon, temptype, nens=5000):
     assert -180 <= lon <= 180
     assert -90 <= lat <= 90
 
-    nd = len(dats)
+    nd = len(seatemp)
 
     draws = get_draws(temptype)
 
@@ -123,7 +123,7 @@ def predict_tex(dats, lat, lon, temptype, nens=5000):
         tau2_now = tau2_samples[i]
         beta_now = beta_samples_comp[i]
         alpha_now = alpha_samples_comp[i]
-        tex[:, i] = np.random.normal(dats * beta_now + alpha_now,
+        tex[:, i] = np.random.normal(seatemp * beta_now + alpha_now,
                                      np.sqrt(tau2_now))
 
     output = Prediction(ensemble=tex,
@@ -133,12 +133,12 @@ def predict_tex(dats, lat, lon, temptype, nens=5000):
     return output
 
 
-def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5000):
+def predict_seatemp(tex, lat, lon, prior_std, temptype, prior_mean=None, nens=5000):
     """Predict sea temperature with TEX86
 
     Parameters
     ----------
-    dats : ndarray
+    tex : ndarray
         n-length array of TEX86 observations from a single location.
     lat : float
         Site latitude from -90 to 90.
@@ -183,7 +183,7 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
     assert ntk > nens
     # TODO(brews): trim modelparams draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
 
-    nd = len(dats)
+    nd = len(tex)
 
     if prior_mean is None:
         close_obs, close_dist = obs.get_close_obs(lat=lat, lon=lon)
@@ -202,7 +202,7 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
         preds[:, jj] = target_timeseries_pred(alpha_now=alpha_samples_comp[jj],
                                               beta_now=beta_samples_comp[jj],
                                               tau2_now=tau2_samples[jj],
-                                              proxy_ts=dats,
+                                              proxy_ts=tex,
                                               prior_pars=prior_par)
         # TODO(brews): Consider a progress bar for this loop.
 
@@ -215,13 +215,12 @@ def predict_seatemp(dats, lat, lon, prior_std, temptype, prior_mean=None, nens=5
     return output
 
 
-def predict_seatemp_analog(dats, prior_std, temptype, search_tol,
-                           prior_mean=None, nens=5000, progressbar=True):
+def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None, nens=5000, progressbar=True):
     """Predict sea temperature with TEX86, using the analog method
 
     Parameters
     ----------
-    dats : ndarray
+    tex : ndarray
         n-length array of TEX86 observations from a single location.
     prior_std : float
         Prior standard deviation for sea temperature (°C).
@@ -266,9 +265,9 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol,
     assert ntk > nens
     # TODO(brews): trim modelparams draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
 
-    nd = len(dats)
+    nd = len(tex)
 
-    latlon_match, val_match = tex_obs.find_within_tolerance(x=dats.mean(),
+    latlon_match, val_match = tex_obs.find_within_tolerance(x=tex.mean(),
                                                             tolerance=search_tol)
     n_locs_g = len(latlon_match)
     assert n_locs_g > 0
@@ -293,7 +292,7 @@ def predict_seatemp_analog(dats, prior_std, temptype, search_tol,
             preds[:, kk, jj] = target_timeseries_pred(alpha_now=a_now,
                                                       beta_now=b_now,
                                                       tau2_now=t2_now,
-                                                      proxy_ts=dats,
+                                                      proxy_ts=tex,
                                                       prior_pars=prior_par)
 
     output = Prediction(ensemble=preds,

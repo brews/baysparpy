@@ -32,8 +32,7 @@ def test_predict_tex_sst():
             'predsens': np.ones((3, nens))
             }
 
-    victim = predict_tex(dats=proxy_ts, lat=lat, lon=lon, temptype=temptype,
-                         nens=nens)
+    victim = predict_tex(seatemp=proxy_ts, lat=lat, lon=lon, temptype=temptype, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=0.25)
     assert victim.location == goal['siteloc']
@@ -69,8 +68,7 @@ def test_predict_seatemp():
             'predsens': np.ones((5, nens))
             }
 
-    victim = predict_seatemp(dats=proxy_ts, lat=lat, lon=lon,
-                             prior_std=prior_std, temptype=temptype, nens=nens)
+    victim = predict_seatemp(tex=proxy_ts, lat=lat, lon=lon, prior_std=prior_std, temptype=temptype, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
     assert victim.location == goal['siteloc']
@@ -104,9 +102,7 @@ def test_predict_seatemp_analog_sst():
             'predsens': np.ones((4, 13, nens))
             }
 
-    victim = predict_seatemp_analog(dats=proxy_ts, prior_std=prior_std,
-                                    temptype=temptype,
-                                    search_tol=search_tol,
+    victim = predict_seatemp_analog(tex=proxy_ts, prior_std=prior_std, temptype=temptype, search_tol=search_tol,
                                     prior_mean=prior_mean, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
