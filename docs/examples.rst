@@ -5,10 +5,6 @@
 Examples
 ########
 
-.. warning::
-
-   The project is under heavy development. Code and documentation are not complete.
-
 To start things off, import a few basic
 tools, including `bayspar`:
 
@@ -127,19 +123,15 @@ We can run the analog prediction of SST with :py:func:`predict_seatemp_analog`:
                                             search_tol=search_tolerance,
                                             nens=500)
 
-Blah blah, what is an analog prediction, talk about the above function run. We
-get a prediction object out of it. Beware (note) that it can be slow if many
-analogs are selected.
+A :py:class:`~predict.Prediction` instance is returned from the function. The arguments that we pass to the function indicate that the calibration is for SST. We also indicate a prior mean and standard deviation for the sea temperature inference. Note that we pass a search tolerance used to find analogous conditions across the global TEX\ :sub:`86` dataset. The `nens` argument is to reduce the size of the model parameter ensemble used for the inference - we're using this option because otherwise this page of documentation would take far to log to compile, so it isn't required if you're following along with these examples on your own machine. By default, a progress bar is printed to the screen. This is an optional feature that can be switched off, for example, if you are processing many cores in batch.
 
-We can plot a time series of the prediction:
+.. Note::
 
-.. ipython:: python
+   Analog predictions are slow if many analogs are selected.
 
-    @savefig predictplot_wilson_rough.png width=4in
-    bsr.predictplot(prediction, x=d['depth'], xlabel='Depth (m)',
-                    ylabel='SST (°C)')
 
-We can also map the information used for the analog prediction:
+
+Specifically, for analog predictions, we can map the information used for the inference with :py:func:`analogmap`:
 
 .. ipython:: python
 
@@ -148,7 +140,16 @@ We can also map the information used for the analog prediction:
     @savefig analogmap_wilson_rough.png width=4in
     ax.legend()
 
-Blah blah blah blah.
+This maps the location of all available TEX\ :sub:`86` observations. We passed an optional paleo-location of the site to the mapping function. The map also indicates the grids that were identified as analogs for the prediction.
+
+We can also examine our prediction as though it were a standard prediction. For example, we can plot a time series of the prediction:
+
+.. ipython:: python
+
+    @savefig predictplot_wilson_rough.png width=4in
+    bsr.predictplot(prediction, x=d['depth'], xlabel='Depth (m)',
+                    ylabel='SST (°C)')
+
 
 Forward prediction
 ------------------
