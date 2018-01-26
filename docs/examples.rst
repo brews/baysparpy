@@ -49,10 +49,10 @@ We can make a "standard" prediction of sea-surface temperature (SST) with :py:fu
                                      prior_std=6, temptype='sst')
 
 The TEX\ :sub:`86` data and site position are passed to the prediction
-function. Additionally, we give standard deviation for the prior
-SST distribution. We also specify that SST are
+function. We also give standard deviation for the prior
+SST distribution and specify that SST are
 the target variable. A :py:class:`~predict.Prediction` instance is returned,
-which we can poked and prod with direct queries or with a few built-in
+which we can poked and prod with direct queries or using a few built-in
 functions:
 
 .. ipython:: python
@@ -72,7 +72,7 @@ modify the plot as needed:
     @savefig predictplot_castaneda_pretty.png width=4in
     ax.legend()
 
-In much the same way, we can view the distribution of the prediction prior and posterior with :py:func:`densityplot':
+In much the same way, we can view the distribution of the prediction prior and posterior with :py:func:`densityplot`:
 
 .. ipython:: python
 
@@ -83,6 +83,19 @@ In much the same way, we can view the distribution of the prediction prior and p
     @savefig densityplot_castaneda_pretty.png width=4in
     ax.legend()
 
+We can access the full prediction ensemble with:
+
+.. ipython:: python
+
+    prediction.ensemble
+
+A useful summary is available using:
+
+.. ipython:: python
+
+    prediction.percentile()[:10]  # Showing only the first few values.
+
+See the :py:meth:`~predict.Prediction.percentile` method for more options.
 
 Analog prediction
 -----------------
