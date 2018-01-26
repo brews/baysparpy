@@ -13,7 +13,6 @@ BAYSPAR in Python
    The project is under heavy development. Code and documentation are not complete.
 
 
-
 **baysparpy** is an open source Python package for `TEX86 calibration <https://en.wikipedia.org/wiki/TEX86>`_.
 
 The package is based on the `original BAYSPAR <https://github.com/jesstierney/BAYSPAR>`_ (BAYesian SPAtially-varying Regression) software for MATLAB.
@@ -43,10 +42,10 @@ See also
 - http://bayspar.geo.arizona.edu/
 
 
-Get in touch
-------------
+Support and development
+-----------------------
 
-- Please feel free to report bugs or view the source code `on GitHub <http://github.com/brews/baysparpy>`_.
+- Please feel free to report bugs and issues or view the source code `on GitHub <http://github.com/brews/baysparpy>`_.
 
 License
 -------

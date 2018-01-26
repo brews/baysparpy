@@ -130,7 +130,6 @@ A :py:class:`~predict.Prediction` instance is returned from the function. The ar
    Analog predictions are slow if many analogs are selected.
 
 
-
 Specifically, for analog predictions, we can map the information used for the inference with :py:func:`analogmap`:
 
 .. ipython:: python
