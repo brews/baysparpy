@@ -78,6 +78,22 @@ def map_analog_boxes(prediction, ax=None):
 
 
 def get_grid_corners(latlons, halfgrid=10):
+    """Get 4 corners of observation grids
+
+    Parameters
+    ----------
+    latlons : sequence
+        Sequence of (lat, lon) for grid.
+    halfgrid : int or float, optional
+        Size of half-grid.
+
+    Returns
+    -------
+    ys : list
+        List containing 5-element tuples for latitude of each grid point.
+    xs : list
+        List containing 5-element tuples for longitude of each grid point.
+    """
     ys = []
     xs = []
     for lat, lon in latlons:
@@ -94,6 +110,24 @@ def get_grid_corners(latlons, halfgrid=10):
 
 def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, ax=None):
     """Lineplot of prediction with uncertainty estimate
+
+    Parameters
+    ----------
+    prediction : bayspar.predict.Prediction
+        MCMC prediction
+    ylabel : string, optional
+        String label for y-axis.
+    x : numpy.ndarray, optional
+        Array over which to evaluate the densities. Default is
+        `numpy.arange(0, 40.1, 0.1)`.
+    xlabel : string, optional
+        String label for x-axis.
+    ax : matplotlib.Axes, optional
+        Axes to plot onto.
+
+    Returns
+    -------
+    ax : matplotlib.Axes
     """
     if ax is None:
         ax = plt.gca()
@@ -134,6 +168,19 @@ def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, a
 
 def analogmap(prediction, latlon=None, ax=None):
     """Map analog prediction with grids used for analog and TEX86 sites
+
+    Parameters
+    ----------
+    prediction : bayspar.predict.Prediction
+        MCMC prediction
+    latlon : sequence, optional
+        Latitude and longitude for prediction site.
+    ax : matplotlib.Axes, optional
+        Axes to plot onto.
+
+    Returns
+    -------
+    ax : matplotlib.Axes
     """
     if ax is None:
         ax = _default_map_ax()
