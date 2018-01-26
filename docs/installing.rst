@@ -25,19 +25,9 @@ pip
 
 To install **baysparpy** with pip, run::
 
-    $ pip install baysparpy
+    $ pip install git+git://github.com/brews/baysparpy.git@stable
 
 and follow the on-screen prompts.
-
-conda
-~~~~~
-
-If you'd rather use Anaconda/miniconda, run::
-
-    $ conda install baysparpy -c sbmalev
-
-and follow prompts.
-
 
 Testing
 -------

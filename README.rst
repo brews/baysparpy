@@ -41,11 +41,7 @@ Installation
 
 To install **baysparpy** with pip, run::
 
-    $ pip install baysparpy
-
-If you'd rather use Anaconda/miniconda, run::
-
-    $ conda install baysparpy -c sbmalev
+    $ pip install git+git://github.com/brews/baysparpy.git@stable
 
 Unfortunately, **baysparpy** is not compatible with Python 2.
 
