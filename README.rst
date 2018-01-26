@@ -7,16 +7,15 @@ baysparpy
 
 An open source Python package for TEX86 calibration.
 
-The package is based on the original BAYSPAR (https://github.com/jesstierney/BAYSPAR)_ (BAYesian SPAtially-varying Regression) software for MATLAB.
+The package is based on the original BAYSPAR (BAYesian SPAtially-varying Regression) software for MATLAB (https://github.com/jesstierney/BAYSPAR).
 
 
 Quick example
 -------------
 
-Here is a quick example. First, load key packages and an example dataset::
+First, load key packages and an example dataset::
 
     import numpy as np
-    import matplotlib.pyplot as plt
     import bayspar as bsr
 
     example_file = bsr.get_example_data('castaneda2010.csv')
@@ -25,7 +24,7 @@ Here is a quick example. First, load key packages and an example dataset::
 This dataset (from `Castañeda et al. 2010 <https://doi.org/10.1029/2009PA001740>`_)
 has two columns giving sediment age (calendar years BP) and TEX86.
 
-We can make a "standard" prediction of sea-surface temperature (SST) with ``predict_seatemp``::
+We can make a "standard" prediction of sea-surface temperature (SST) with ``predict_seatemp()``::
 
     prediction = bsr.predict_seatemp(d['tex86'], lon=34.0733, lat=31.6517,
                                      prior_std=6, temptype='sst')
@@ -48,6 +47,7 @@ If you'd rather use Anaconda/miniconda, run::
 
     $ conda install baysparpy -c sbmalev
 
+Unfortunately, **baysparpy** is not compatible with Python 2.
 
 Support and development
 -----------------------
@@ -60,5 +60,5 @@ Support and development
 License
 -------
 
-**baysparpy** is available under the Open Source `GPLv3 (https://www.gnu.org/licenses).
+**baysparpy** is available under the Open Source GPLv3 (https://www.gnu.org/licenses).
 
