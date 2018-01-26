@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='bayspar',
+    name='baysparpy',
     version='0.0.1',
     description='A Python implementation of BAYSPLINE',
     license='GPLv3',
@@ -25,7 +25,7 @@ setup(
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 3',
     ],
-    keywords='marine paleoclimate tex86',
+    keywords='marine paleoclimate tex86 calibration',
 
     packages=find_packages(exclude=['docs']),
 
