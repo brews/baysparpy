@@ -1,4 +1,4 @@
-.. currentmodule:: snakebacon
+.. currentmodule:: bayspar
 
 What's New
 ==========
@@ -9,9 +9,4 @@ What's New
 v0.0.1
 ------
 
-Enhancements
-~~~~~~~~~~~~
-
-Bug fixes
-~~~~~~~~~
-- Documentation spelling errors.
+- This is the first release of **baysparpy**.
