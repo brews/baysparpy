@@ -54,7 +54,7 @@ def map_site(prediction, latlon=None, ax=None):
     if latlon is not None:
         latlon = latlon
     else:
-        latlon = prediction.location
+        latlon = prediction.latlon
 
     if ax is None:
         ax = _default_map_ax()

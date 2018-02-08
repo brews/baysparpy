@@ -35,7 +35,7 @@ def test_predict_tex_sst():
     victim = predict_tex(seatemp=proxy_ts, lat=lat, lon=lon, temptype=temptype, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=0.25)
-    assert victim.location == goal['siteloc']
+    assert victim.latlon == goal['siteloc']
     assert victim.modelparam_gridpoints == goal['gridloc']
     assert victim.ensemble.shape == goal['predsens'].shape
 
@@ -71,7 +71,7 @@ def test_predict_seatemp():
     victim = predict_seatemp(tex=proxy_ts, lat=lat, lon=lon, prior_std=prior_std, temptype=temptype, nens=nens)
 
     np.testing.assert_allclose(victim.percentile(), goal['preds'], atol=1)
-    assert victim.location == goal['siteloc']
+    assert victim.latlon == goal['siteloc']
     assert victim.modelparam_gridpoints == goal['gridloc']
     np.testing.assert_allclose(victim.prior_mean, goal['priormean'],
                                atol=1e-5)

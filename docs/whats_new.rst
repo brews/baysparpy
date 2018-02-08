@@ -8,6 +8,13 @@ What's New
 v0.0.2
 ------
 
+Enhancements
+~~~~~~~~~~~~
+- :py:attr:`Prediction.location` refactored to :py:attr:`Prediction.latlon` (`Issue #8 <https://github.com/brews/baysparpy/issues/8>`_).
+
+
+Bug fixes
+~~~~~~~~~
 
 
 .. _whats-new.0.0.1:

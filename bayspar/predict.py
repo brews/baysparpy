@@ -19,7 +19,7 @@ class Prediction:
         ensemble members.
     temptype : str
         Type of sea temperature used for prediction.
-    location : tuple or None, optional
+    latlon : tuple or None, optional
         Optional tuple of the site location (lat, lon).
     prior_mean : float or None, optional
         Prior mean used for the prediction.
@@ -33,8 +33,8 @@ class Prediction:
     """
     temptype = attr.ib()
     ensemble = attr.ib(validator=av.optional(av.instance_of(np.ndarray)))
-    location = attr.ib(default=None,
-                       validator=av.optional(av.instance_of(tuple)))
+    latlon = attr.ib(default=None,
+                     validator=av.optional(av.instance_of(tuple)))
     prior_mean = attr.ib(default=None)
     prior_std = attr.ib(default=None)
     modelparam_gridpoints = attr.ib(default=None,
@@ -128,7 +128,7 @@ def predict_tex(seatemp, lat, lon, temptype, nens=5000):
 
     output = Prediction(ensemble=tex,
                         temptype=temptype,
-                        location=(lat, lon),
+                        latlon=(lat, lon),
                         modelparam_gridpoints=[tuple(grid_latlon)])
     return output
 
@@ -208,7 +208,7 @@ def predict_seatemp(tex, lat, lon, prior_std, temptype, prior_mean=None, nens=50
 
     output = Prediction(ensemble=preds,
                         temptype=temptype,
-                        location=(lat, lon),
+                        latlon=(lat, lon),
                         prior_mean=prior_mean,
                         prior_std=prior_std,
                         modelparam_gridpoints=[tuple(grid_latlon)])
