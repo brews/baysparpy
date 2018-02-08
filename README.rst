@@ -31,7 +31,7 @@ We can make a "standard" prediction of sea-surface temperature (SST) with ``pred
 
 To see actual numbers from the prediction, directly parse ``prediction.ensemble`` or use ``prediction.percentile()`` to get the 5%, 50% and 95% percentiles.
 
-You can also plot your predicition with ``bsr.predictplot()`` or ``bsr.densityplot()``.
+You can also plot your prediction with ``bsr.predictplot()`` or ``bsr.densityplot()``.
 
 For further details, examples, and additional prediction functions, see the online documentation (https://baysparpy.readthedocs.io).
 
