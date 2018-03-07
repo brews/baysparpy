@@ -37,9 +37,7 @@ class Draws:
     """Spatially-aware modelparams draws
     """
     alpha_samples_comp = attr.ib()
-    alpha_samples_field = attr.ib()
     beta_samples_comp = attr.ib()
-    beta_samples_field = attr.ib()
     tau2_samples = attr.ib()
     locs_comp = attr.ib()
     _half_grid_space = attr.ib(default=10)
@@ -71,17 +69,13 @@ class Draws:
 
 
 draws_sst = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', 'sst'),
-                  alpha_samples_field=read_draws('alpha_samples.mat', 'sst')['field'],
                   beta_samples_comp=read_draws('beta_samples_comp.mat', 'sst'),
-                  beta_samples_field=read_draws('beta_samples.mat', 'sst')['field'],
                   tau2_samples=read_draws('tau2_samples.mat', 'sst'),
                   locs_comp=read_draws('Locs_Comp.mat', 'sst'))
 
 
 draws_subt = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', 'subt'),
-                   alpha_samples_field=read_draws('alpha_samples.mat', 'subt')['field'],
                    beta_samples_comp=read_draws('beta_samples_comp.mat', 'subt'),
-                   beta_samples_field=read_draws('beta_samples.mat', 'subt')['field'],
                    tau2_samples=read_draws('tau2_samples.mat', 'subt'),
                    locs_comp=read_draws('Locs_Comp.mat', 'subt'))
 
