@@ -15,7 +15,7 @@ Enhancements
 
 Bug fixes
 ~~~~~~~~~
-- Minor corrections to documentation and docstrings (`Issue #10 <https://github.com/brews/baysparpy/issues/10>`_
+- Minor corrections to documentation and docstrings (`Issue #10 <https://github.com/brews/baysparpy/issues/10>`_, `Issue #5 <https://github.com/brews/baysparpy/issues/5>`_).
 
 
 .. _whats-new.0.0.1:

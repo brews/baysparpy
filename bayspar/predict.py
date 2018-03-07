@@ -89,16 +89,7 @@ def predict_tex(seatemp, lat, lon, temptype, nens=5000):
 
     Returns
     -------
-    output : dict
-        preds : ndarray
-            Predicted TEX86 percentiles.
-        siteloc : tuple
-            Site (lat, lon).
-        gridloc': sequence
-            Latlon of the observation gridpoint used as prior mean.
-        predsens': ndarray or None
-            If 'save_ensemble' is True, this is the full MCMC ensemble for TEX86
-            prediction. Otherwise, is None.
+    output : Prediction
     """
     # TODO(brews): Write predict_tex() function.
     assert temptype in ['sst', 'subt']
@@ -156,20 +147,7 @@ def predict_seatemp(tex, lat, lon, prior_std, temptype, prior_mean=None, nens=50
 
     Returns
     -------
-    output : dict
-        preds : ndarray
-            Predicted sea temperature percentiles.
-        siteloc : tuple
-            Site (lat, lon).
-        gridloc': sequence
-            Latlon of the observation gridpoint used as prior mean.
-        priormean': float
-            Sea temperature (°C) prior mean from observation.
-        priorstd': float
-            Sea temperature (°C) prior standard deviation.
-        predsens': ndarray or None
-            If 'save_ensemble' is True, this is the full MCMC ensemble for sea
-            temperature prediction. Otherwise, is None.
+    output : Prediction
     """
     assert temptype in ['sst', 'subt']
     assert -180 <= lon <= 180
@@ -242,18 +220,7 @@ def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None
 
     Returns
     -------
-    output : dict
-        preds : ndarray
-            Predicted sea temperature percentiles.
-        anlocs : sequence
-            Sequence of (lat, lon) used for the analog.
-        priormean: float
-            Sea temperature (°C) prior mean.
-        priorstd: float
-            Sea temperature (°C) prior standard deviation.
-        predsens': ndarray or None
-            If 'save_ensemble' is True, this is the full MCMC ensemble for sea
-            temperature prediction. Otherwise, is None.
+    output : Prediction
     """
     assert temptype in ['sst', 'subt']
 
