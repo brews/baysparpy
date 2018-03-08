@@ -90,13 +90,17 @@ def predict_tex(seatemp, lat, lon, temptype, nens=5000):
     Returns
     -------
     output : Prediction
-    """
-    nd = len(seatemp)
 
+    Raises
+    ------
+    EnsembleSizeError
+    """
     draws = get_draws(temptype)
 
+    nd = len(seatemp)
     ntk = draws.alpha_samples_comp.shape[1]
-    assert ntk > nens
+    if ntk < nens:
+        raise EnsembleSizeError(ntk, nens)
 
     alpha_samples_comp, beta_samples_comp = draws.find_alphabeta_near(lat=lat,
                                                                       lon=lon)
@@ -143,16 +147,18 @@ def predict_seatemp(tex, lat, lon, prior_std, temptype, prior_mean=None, nens=50
     Returns
     -------
     output : Prediction
+
+    Raises
+    ------
+    EnsembleSizeError
     """
     draws = get_draws(temptype)
     obs = get_seatemp(temptype)
 
-    # TODO(brews): trim tau**2 (may not have burnin) ln 92 of bayspar_tex.m
-    ntk = draws.alpha_samples_comp.shape[1]
-    assert ntk > nens
-    # TODO(brews): trim modelparams draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
-
     nd = len(tex)
+    ntk = draws.alpha_samples_comp.shape[1]
+    if ntk < nens:
+        raise EnsembleSizeError(ntk, nens)
 
     if prior_mean is None:
         close_obs, close_dist = obs.get_close_obs(lat=lat, lon=lon)
@@ -202,9 +208,6 @@ def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None
         Prior mean for sea temperature (°C).
     nens : int
         Size of MCMC ensemble draws to use for calculation.
-    save_ensemble : bool
-        Should the entire MCMC ensemble be returned? If not, then just
-        percentiles.
     progressbar: bool
         Whether or not to display a progress bar on the command line. The bar
         shows how many analogs have been completed.
@@ -212,16 +215,18 @@ def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None
     Returns
     -------
     output : Prediction
+
+    Raises
+    ------
+    EnsembleSizeError
     """
     draws = get_draws(temptype)
     tex_obs = get_tex(temptype)
 
-    # TODO(brews): trim tau**2 (may not have burnin) ln 92 of bayspar_tex.m
-    ntk = draws.alpha_samples_comp.shape[1]
-    assert ntk > nens
-    # TODO(brews): trim modelparams draws to "sample full span of ensemble" (ln 88-101 of bayspar_tex.m)
-
     nd = len(tex)
+    ntk = draws.alpha_samples_comp.shape[1]
+    if ntk < nens:
+        raise EnsembleSizeError(ntk, nens)
 
     latlon_match, val_match = tex_obs.find_within_tolerance(x=tex.mean(),
                                                             tolerance=search_tol)
@@ -256,3 +261,18 @@ def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None
                         prior_std=prior_std,
                         analog_gridpoints=latlon_match)
     return output
+
+
+class EnsembleSizeError(Exception):
+    """Raised when user requests too large an ensemble for prediction
+
+    Parameters
+    ----------
+    available_size : int
+        The available ensemble size.
+    requested_size : int
+        The user-requested ensemble size.
+    """
+    def __init__(self, available_size, requested_size):
+        self.available_size = available_size
+        self.requested_size = requested_size

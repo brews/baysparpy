@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from bayspar.predict import (Prediction, predict_seatemp, predict_tex,
-                             predict_seatemp_analog)
+                             predict_seatemp_analog, EnsembleSizeError)
 
 
 def test_percentile():
@@ -11,6 +11,18 @@ def test_percentile():
     victim = prediction_test.percentile()
     goal = np.array([[0, 0], [4, 4], [9, 9]]).T
     np.testing.assert_equal(victim, goal)
+
+
+def test_predict_tex_EnsembleSizeError():
+    """Check raised error with very large nens from user."""
+    proxy_ts = np.array([1, 15, 30])
+    lat = -79.49700165
+    lon = -18.699981690000016
+    temptype = 'sst'
+    nens = 15000
+
+    with pytest.raises(EnsembleSizeError):
+        predict_tex(seatemp=proxy_ts, lat=lat, lon=lon, temptype=temptype, nens=nens)
 
 
 def test_predict_tex_sst():
@@ -22,7 +34,7 @@ def test_predict_tex_sst():
     lat = -79.49700165
     lon = -18.699981690000016
     temptype = 'sst'
-    nens = 15000
+    nens = 10000
 
     goal = {'preds': np.array([[0.30417229, 0.387622, 0.47020701],
                                [0.43638587, 0.54384393, 0.64827802],
@@ -54,7 +66,7 @@ def test_predict_seatemp():
     lat = -64.8527
     lon = -64.2080
     temptype = 'subt'
-    nens = 15000
+    nens = 1000
 
     goal = {'preds': np.array([[-11.23432951, -5.01136252, 1.13921719],
                                [-11.14555545, -4.7805361, 1.3855262],
@@ -86,7 +98,7 @@ def test_predict_seatemp_analog_sst():
     temptype = 'sst'
     prior_std = 20
     prior_mean = 30
-    nens = 15000
+    nens = 10000
     search_tol = np.std(proxy_ts, ddof=1) * 2
 
     goal = {'preds': np.array([[27.518104, 32.925663, 39.850845],
