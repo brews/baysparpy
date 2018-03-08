@@ -21,7 +21,6 @@ def read_draws(flstr, drawtype):
     """Grab single squeezed array from package resources
     """
     drawtype = drawtype.lower()
-    assert drawtype in ['subt', 'sst']
 
     var_template = 'modelparams/Output_SpatAg_{0}/{1}'
 
@@ -45,8 +44,9 @@ class Draws:
     def _index_near(self, lat, lon):
         """Get gridpoint index nearest a lat lon
         """
-        assert -90 <= lat <= 90
-        assert -180 < lon <= 180
+        if not (-90 <= lat <= 90) or not (-180 < lon <= 180):
+            raise BadLatlonError(tuple([lat, lon]))
+
         lon_adiff = np.abs(self.locs_comp[:, 0] - lon) <= self._half_grid_space
         lat_adiff = np.abs(self.locs_comp[:, 1] - lat) <= self._half_grid_space
         return np.where(lon_adiff & lat_adiff)
@@ -68,6 +68,18 @@ class Draws:
         return alpha_select, beta_select
 
 
+class BadLatlonError(Exception):
+    """Raised when latitude or longitude is outside (-90, 90) or (-180, 180)
+
+    Parameters
+    ----------
+    latlon : tuple
+        The bad (lat, lon) values.
+    """
+    def __init__(self, latlon):
+        self.latlon = latlon
+
+
 draws_sst = Draws(alpha_samples_comp=read_draws('alpha_samples_comp.mat', 'sst'),
                   beta_samples_comp=read_draws('beta_samples_comp.mat', 'sst'),
                   tau2_samples=read_draws('tau2_samples.mat', 'sst'),
@@ -87,5 +99,3 @@ def get_draws(drawtype):
         return deepcopy(draws_sst)
     elif drawtype == 'subt':
         return deepcopy(draws_subt)
-    else:
-        assert drawtype in ['sst', 'subt']

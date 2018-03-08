@@ -22,7 +22,6 @@ def read_seatemp(obstype):
     """Grab squeezed variable & locs array from sea temp package resources
     """
     obstype = obstype.lower()
-    assert obstype in ['subt', 'sst']
 
     locs_template = 'observations/locs_woa_1degree_asvec_{0}.mat'
     var_template = 'observations/st_woa_1degree_asvec_{0}.mat'
@@ -74,8 +73,8 @@ def chord_distance(latlon1, latlon2):
     """
     earth_radius = 6378.137  # in km
 
-    assert latlon1.shape[1] == 2
-    assert latlon2.shape[1] == 2
+    latlon1 = np.atleast_2d(latlon1)
+    latlon2 = np.atleast_2d(latlon2)
 
     n = latlon1.shape[0]
     m = latlon2.shape[0]
@@ -232,8 +231,6 @@ def get_seatemp(obstype):
         return deepcopy(seatemp_sst)
     elif obstype == 'subt':
         return deepcopy(seatemp_subt)
-    else:
-        assert obstype in ['sst', 'subt']
 
 
 def get_tex(obstype):
@@ -242,5 +239,3 @@ def get_tex(obstype):
         return deepcopy(tex_sst)
     elif obstype == 'subt':
         return deepcopy(tex_subt)
-    else:
-        assert obstype in ['sst', 'subt']

@@ -91,11 +91,6 @@ def predict_tex(seatemp, lat, lon, temptype, nens=5000):
     -------
     output : Prediction
     """
-    # TODO(brews): Write predict_tex() function.
-    assert temptype in ['sst', 'subt']
-    assert -180 <= lon <= 180
-    assert -90 <= lat <= 90
-
     nd = len(seatemp)
 
     draws = get_draws(temptype)
@@ -149,10 +144,6 @@ def predict_seatemp(tex, lat, lon, prior_std, temptype, prior_mean=None, nens=50
     -------
     output : Prediction
     """
-    assert temptype in ['sst', 'subt']
-    assert -180 <= lon <= 180
-    assert -90 <= lat <= 90
-
     draws = get_draws(temptype)
     obs = get_seatemp(temptype)
 
@@ -222,8 +213,6 @@ def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None
     -------
     output : Prediction
     """
-    assert temptype in ['sst', 'subt']
-
     draws = get_draws(temptype)
     tex_obs = get_tex(temptype)
 
@@ -237,7 +226,6 @@ def predict_seatemp_analog(tex, prior_std, temptype, search_tol, prior_mean=None
     latlon_match, val_match = tex_obs.find_within_tolerance(x=tex.mean(),
                                                             tolerance=search_tol)
     n_locs_g = len(latlon_match)
-    assert n_locs_g > 0
 
     prior_par = {'mu': np.ones(nd) * prior_mean,
                  'inv_cov': np.eye(nd) * prior_std ** -2}

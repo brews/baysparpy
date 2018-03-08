@@ -2,6 +2,7 @@ import pytest
 import numpy as np
 
 from bayspar.modelparams import get_draws
+from bayspar.modelparams.core import BadLatlonError
 
 
 def test__index_near():
@@ -18,6 +19,13 @@ def test__index_near():
     assert victim2[0] == goal2
 
 
+def test__index_near_badlatlon():
+    """Test _index_near raises if latlon outside of (-90, 90) or (-180, 180)
+    """
+    with pytest.raises(BadLatlonError):
+        get_draws('sst')._index_near(45, 240)
+
+
 def test_find_nearest_latlon():
     test_lat = -64.8527
     test_lon = -64.2080
@@ -29,6 +37,3 @@ def test_find_nearest_latlon():
 
     np.testing.assert_equal(victim1, goal)
     np.testing.assert_equal(victim2, goal)
-
-
-

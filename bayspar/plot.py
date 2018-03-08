@@ -151,10 +151,8 @@ def predictplot(prediction, ylabel=None, x=None, xlabel=None, spaghetti=False, a
         n = 100
         shp = prediction.ensemble.shape
         if len(shp) == 2:
-            assert shp[1] >= n
             ax.plot(x, prediction.ensemble[:, -n:], alpha=0.05)
         elif len(shp) == 3:
-            assert shp[1] * shp[2] >= n
             ax.plot(x, prediction.ensemble.reshape(shp[0], shp[1] * shp[2])[:, -n:],
                     alpha=0.1, color='black')
 

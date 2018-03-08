@@ -12,6 +12,7 @@ Enhancements
 ~~~~~~~~~~~~
 - :py:attr:`Prediction.location` refactored to :py:attr:`Prediction.latlon` (`Issue #8 <https://github.com/brews/baysparpy/issues/8>`_).
 - Removed unused :py:attr:`Draws.alpha_samples_field` and :py:attr:`Draws.beta_samples_field` to cut down package size (`Issue #1 <https://github.com/brews/baysparpy/issues/1>`_).
+- Many ``assert`` errors replaced with full errors (`Issue #7 <https://github.com/brews/baysparpy/issues/7>`_).
 
 Bug fixes
 ~~~~~~~~~
