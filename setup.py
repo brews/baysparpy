@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='baysparpy',
-    version='0.0.1',
+    version='0.0.2',
     description='A Python implementation of BAYSPLINE',
     license='GPLv3',
 
