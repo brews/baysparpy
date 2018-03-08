@@ -23,7 +23,7 @@ matrix:
 before_install:
   - if [[ "$JOB_OS" == "MacOSX" ]]; then
       brew update;
-      brew install python3;
+      brew install python;
     fi
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-$JOB_OS-x86_64.sh -O miniconda.sh;
