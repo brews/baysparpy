@@ -20,14 +20,24 @@ Requirements
 Instructions
 ------------
 
+conda
+~~~~~
+
+To install **baysparpy** with ``conda``, run::
+
+    $ conda install baysparpy -c sbmalev
+
+This is usually the easiest way to install the package.
+
 pip
 ~~~
 
-To install **baysparpy** with pip, run::
+To install with ``pip``, run::
 
-    $ pip install git+git://github.com/brews/baysparpy.git@stable
+    $ pip install baysparpy
 
-and follow the on-screen prompts.
+and follow the on-screen prompts. We do not recommend installing with ``pip`` unless you are brave, or already have a copy of `cartopy <http://scitools.org.uk/cartopy/>`_ installed.
+
 
 Testing
 -------
