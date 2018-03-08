@@ -13,7 +13,9 @@ The package is based on the original BAYSPAR (BAYesian SPAtially-varying Regress
 Quick example
 -------------
 
-First, load key packages and an example dataset::
+First, load key packages and an example dataset:
+
+.. code-block:: python
 
     import numpy as np
     import bayspar as bsr
@@ -24,7 +26,9 @@ First, load key packages and an example dataset::
 This dataset (from `Castañeda et al. 2010 <https://doi.org/10.1029/2009PA001740>`_)
 has two columns giving sediment age (calendar years BP) and TEX86.
 
-We can make a "standard" prediction of sea-surface temperature (SST) with ``predict_seatemp()``::
+We can make a "standard" prediction of sea-surface temperature (SST) with ``predict_seatemp()``:
+
+.. code-block:: python
 
     prediction = bsr.predict_seatemp(d['tex86'], lon=34.0733, lat=31.6517,
                                      prior_std=6, temptype='sst')
@@ -39,7 +43,9 @@ For further details, examples, and additional prediction functions, see the onli
 Installation
 ------------
 
-To install **baysparpy** with pip, run::
+To install **baysparpy** with pip, run:
+
+.. code-block:: bash
 
     $ pip install git+git://github.com/brews/baysparpy.git@stable
 
