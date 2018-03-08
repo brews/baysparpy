@@ -10,7 +10,7 @@ BAYSPAR in Python
 
 .. warning::
 
-   The project is under heavy development. Code and documentation are not complete.
+   This project is under heavy development. Code and documentation may change.
 
 
 **baysparpy** is an open source Python package for `TEX86 calibration <https://en.wikipedia.org/wiki/TEX86>`_.

@@ -85,7 +85,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'baysparpy'
-copyright = '2017, S. Brewster Malevich'
+copyright = '2017, 2018, S. Brewster Malevich'
 author = 'S. Brewster Malevich'
 
 # The version info for the project you're documenting, acts as replacement for
