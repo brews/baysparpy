@@ -10,6 +10,7 @@ v0.0.3
 
 Enhancements
 ~~~~~~~~~~~~
+- Many minor changes to documentation.
 
 Bug fixes
 ~~~~~~~~~

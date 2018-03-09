@@ -6,7 +6,7 @@ Examples
 ########
 
 To start things off, import a few basic
-tools, including `bayspar`:
+tools, including :py:mod:`bayspar`:
 
 .. ipython:: python
 
@@ -123,11 +123,11 @@ We can run the analog prediction of SST with :py:func:`predict_seatemp_analog`:
                                             search_tol=search_tolerance,
                                             nens=500)
 
-A :py:class:`~predict.Prediction` instance is returned from the function. The arguments that we pass to the function indicate that the calibration is for SST. We also indicate a prior mean and standard deviation for the sea temperature inference. Note that we pass a search tolerance used to find analogous conditions across the global TEX\ :sub:`86` dataset. The `nens` argument is to reduce the size of the model parameter ensemble used for the inference - we're using this option because otherwise this page of documentation would take far to log to compile, so it isn't required if you're following along with these examples on your own machine. By default, a progress bar is printed to the screen. This is an optional feature that can be switched off, for example, if you are processing many cores in batch.
+A :py:class:`~predict.Prediction` instance is returned from the function. The arguments that we pass to the function indicate that the calibration is for SST. We also indicate a prior mean and standard deviation for the sea temperature inference. Note that we pass a search tolerance used to find analogous conditions across the global TEX\ :sub:`86` dataset. The ``nens`` argument is to reduce the size of the model parameter ensemble used for the inference - we're using this option because otherwise this page of documentation would take far to log to compile, so it isn't required if you're following along with these examples on your own machine. By default, a progress bar is printed to the screen. This is an optional feature that can be switched off, for example, if you are processing many cores in batch.
 
 .. Note::
 
-   Analog predictions are slow if many analogs are selected.
+   Analog predictions can be slow to calculate if many analog are selected. Be careful not to select too large a value for ``search_tol``.
 
 
 Specifically, for analog predictions, we can map the information used for the inference with :py:func:`analogmap`:
