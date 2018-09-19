@@ -12,8 +12,6 @@ Enhancements
 ~~~~~~~~~~~~
 - Many minor changes to documentation.
 
-Bug fixes
-~~~~~~~~~
 
 .. _whats-new.0.0.2:
 

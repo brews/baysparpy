@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name='baysparpy',
-    version='0.0.2',
+    version='0.0.3',
     description='An Open Source Python package for TEX86 calibration',
     long_description=readme(),
     license='GPLv3',
