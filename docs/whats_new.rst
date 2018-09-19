@@ -10,7 +10,7 @@ v0.0.4
 
 Enhancements
 ~~~~~~~~~~~~
--
+- Minor improvements to documentation.
 
 Bug fixes
 ~~~~~~~~~
