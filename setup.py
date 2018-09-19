@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='baysparpy',
     version='0.0.2',
-    description='A Python implementation of BAYSPLINE',
+    description='An Open Source Python package for TEX86 calibration',
     license='GPLv3',
 
     author='S. Brewster Malevich',
