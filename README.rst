@@ -13,7 +13,9 @@ This package is based on the original BAYSPAR (BAYesian SPAtially-varying Regres
 Quick example
 -------------
 
-### Standard prediction
+Standard prediction
+~~~~~~~~~~~~~~~~~~~~~~
+
 
 First, load key packages and an example dataset:
 
@@ -40,7 +42,9 @@ To see actual numbers from the prediction, directly parse ``prediction.ensemble`
 You can also plot your prediction with ``bsr.predictplot()`` or ``bsr.densityplot()``.
 
 
-### Analog prediction
+Analog prediction
+~~~~~~~~~~~~~~~~~~~~~~
+
 
 Begin by loading data for a “Deep-Time” analog prediction:
 
@@ -62,7 +66,9 @@ We can also examine our prediction as though it were a standard prediction. For 
     ax.grid()
     ax.legend()
 
-### Forward prediction
+Forward prediction
+~~~~~~~~~~~~~~~~~~~~~~
+
 
 For this example, we make inferences about TEX86 from SST data using a forward-model prediction. We start by creating a SST series spanning from 0 - 40 °C. 
 
@@ -81,7 +87,9 @@ As might be expected, we can use the output of the forward prediction to parse a
     ax.legend()
     
 
-### Analog forward prediction
+Analog forward prediction
+~~~~~~~~~~~~~~~~~~~~~~
+
 
 This tool will calculate forwarded TEX using given SST data. Here is an example:
 
@@ -98,7 +106,9 @@ And then plug the SST data into predict_tex_analog() along with additional infor
 
 We can use the output of the forward prediction to parse and plot.
 
-### Read More
+Read More
+~~~~~~~~~~~~~~~~~~~~~~
+
 
 For further details, examples, and additional prediction functions, see the online documentation (https://baysparpy.readthedocs.io).
 
