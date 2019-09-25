@@ -48,7 +48,7 @@ Analog prediction
 
 Begin by loading data for a “Deep-Time” analog prediction:
 
-This dataset is a TEX86 record from record from Wilson Lake, New Jersey (Zachos et al. 2006). The file has two columns giving depth (m) and TEX86:
+This dataset is a TEX86 record from record from Wilson Lake, New Jersey (`Zachos et al. 2006 <https://doi.org/10.1130/G22522.1>`_). The file has two columns giving depth (m) and TEX86:
 
 
 .. code-block:: python
@@ -57,7 +57,7 @@ This dataset is a TEX86 record from record from Wilson Lake, New Jersey (Zachos 
     d = np.genfromtxt(example_file, delimiter=',', names=True)
     
 
-We can run the analog prediction of SST with predict_seatemp_analog().
+We can run the analog prediction of SST with ``predict_seatemp_analog()``.
 We can also examine our prediction as though it were a standard prediction. For example, we can plot a time series of the prediction:
 
 .. code-block:: python
@@ -75,7 +75,7 @@ Forward prediction
 
 For this example, we make inferences about TEX86 from SST data using a forward-model prediction. We start by creating a SST series spanning from 0 - 40 °C. 
 
-And now plug the SST data into predict_tex() along with additional information. In this case we’re using the same site location as in Standard prediction:
+And now plug the SST data into ``predict_tex()`` along with additional information. In this case we’re using the same site location as in Standard prediction:
 
 .. code-block:: python
 
@@ -108,7 +108,7 @@ This tool will calculate forwarded TEX using given SST data. Here is an example:
 
 First, we make inferences about deep-time TEX86 from SST data using a forward-model analog prediction. We start by creating a SST series spanning from 0 - 40 °C.
 
-And then plug the SST data into predict_tex_analog() along with additional information (search tolerance is 5 °C).
+And then plug the SST data into ``predict_tex_analog()`` along with additional information (search tolerance is 5 °C).
 
 We can use the output of the forward prediction to parse and plot.
 
