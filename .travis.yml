@@ -13,18 +13,8 @@ matrix:
       env:
         - CONDA_ENV=py36
         - JOB_OS=Linux
-    - os: osx
-      language: generic
-#      python: 3.5
-      env:
-        - CONDA_ENV=py35
-        - JOB_OS=MacOSX
 
 before_install:
-  - if [[ "$JOB_OS" == "MacOSX" ]]; then
-      brew update;
-      brew upgrade python;
-    fi
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-$JOB_OS-x86_64.sh -O miniconda.sh;
     else
