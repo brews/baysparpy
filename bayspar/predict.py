@@ -1,10 +1,59 @@
+"""
+    baysparpy
+    =========
+
+    An Open Source Python package for TEX86 calibration.
+
+    This package is based on the original BAYSPAR 
+    (BAYesian SPAtially-varying Regression) for MATLAB 
+    (https://github.com/jesstierney/BAYSPAR).
+
+    Originator: Steven Brewster Malevich
+                University of Arizona Department of Geosciences
+
+    Revisions:  Mingsong Li
+                Penn State Geosciences
+    Date:       Sept 23, 2019
+
+    Revision: Mingsong Li
+                Peking University
+    Date:       Jun 16, 2021
+                     
+    Purpose: add predict_tex_analog module
+             
+            : TEX_forward model for analog model of baysparpy
+            to simplify the code and save space
+            
+            add get_draws_analog module
+            : Get Draws instance for a draw type
+            for the analog model
+    
+    New files added: alpha_samples.mat
+                     beta_samples.mat
+            These two files were trimmed as they may not have had burnin removed
+            They were calculated using the following matlab code 
+            in TEX_forward.m of BAYSPAR
+            https://github.com/jesstierney/BAYSPAR/blob/master/TEX_forward.m
+
+        Ntk = 20000;
+        load('alpha_samples.mat', 'alpha_samples')
+        alpha_samples=[alpha_samples.field];
+        alpha_samples=alpha_samples(:,end-Ntk+1:end);
+        load('beta_samples.mat')
+        beta_samples=[beta_samples.field];
+        beta_samples=beta_samples(:,end-Ntk+1:end);
+        save('alpha_samples','alpha_samples');
+        save('beta_samples','beta_samples');
+"""
 import numpy as np
+import numpy.matlib
 import attr
 import attr.validators as av
 from tqdm import tqdm
+import sys
 
 from bayspar.utils import target_timeseries_pred
-from bayspar.modelparams import get_draws
+from bayspar.modelparams import get_draws, get_draws_analog
 from bayspar.observations import get_seatemp, get_tex
 
 
@@ -69,6 +118,83 @@ class Prediction:
                              interpolation=interpolation)
         return perc.T
 
+def predict_tex_analog(seatemp, temptype = 'sst', search_tol = 5., nens=5000):
+    """Predict TEX86 from sea temperature analog model
+
+    Parameters
+    ----------
+    seatemp : ndarray
+            n-length array of sea temperature observations (°C) from a single location.
+    temptype : str 
+            Type of sea temperature used. Either 'sst' (default) for sea-surface or 'subt'.
+    search_tol: float 
+            search tolerance in seatemp units (required for analog mode)
+    nens : int 
+            Size of MCMC ensemble draws to use for calculation.
+        
+    Returns
+    -------
+    output : Prediction
+    Raises
+    ------
+    EnsembleSizeError
+    """
+    draws = get_draws_analog(temptype)
+    tex_obs = get_tex(temptype)
+    
+    nd = len(seatemp)  # number of input sea temperature data
+    
+    ntk = draws.alpha_samples_comp.shape[1]
+    if ntk < nens:
+        raise EnsembleSizeError(ntk, nens)
+        
+    latlon_match, val_match, inder_g = tex_obs.find_t_within_tolerance(t=seatemp.mean(),
+                                                                       tolerance=search_tol)
+    
+    if inder_g.size == 0:
+        sys.exit('No analogs were found. Check seatemp or make your search tolerance wider.')
+        
+    alpha_samples1 = draws.alpha_samples_comp[inder_g]
+    
+    beta_samples1 = draws.beta_samples_comp[inder_g]
+    tau2_samples1 = draws.tau2_samples.reshape((draws.tau2_samples.size,1)).T
+
+    tau2_sample_reshapen = int(alpha_samples1.shape[0] * alpha_samples1.shape[1] / draws.tau2_samples.size)
+    
+    alpha_samples = np.reshape(alpha_samples1, (alpha_samples1.size, ))
+    beta_samples = np.reshape(beta_samples1, (beta_samples1.size, ))
+    
+    tau2_samples2 = np.matlib.repmat(tau2_samples1, 1, tau2_sample_reshapen)
+    tau2_samples = np.reshape(tau2_samples2, (tau2_samples2.size, ))
+    
+    # downsample to nens = 5000
+    iters=alpha_samples.size
+    ds=round(float(iters)/nens)
+    dsarray = np.arange(0,alpha_samples.size,ds)
+    
+    alpha_samples3 = alpha_samples[dsarray]
+    #print('mean of sliced alpha_samples {}'.format(np.mean(alpha_samples)))
+    beta_samples3 = beta_samples[dsarray]
+    tau2_samples3 = tau2_samples[dsarray]
+        
+    # numpy empty storing tex data
+    tex = np.empty((nd, nens))
+    # estimate tex using given alpha_samples_comp, beta_samples_comp, and tau2_samples
+    for i in range(nens):
+        tau2_now  = tau2_samples3[i]
+        beta_now  = beta_samples3[i]
+        alpha_now = alpha_samples3[i]
+        tex[:, i] = np.random.normal(seatemp * beta_now + alpha_now,
+                                     np.sqrt(tau2_now))
+    
+    tex[tex > 1] = 1
+    tex[tex < 0] = 0
+    #grid_latlon = draws.find_nearest_latlon(lat=lat, lon=lon)  # useless?
+    output = Prediction(ensemble=tex,
+                        temptype=temptype,
+                        analog_gridpoints=[tuple(latlon_match)])
+    return output
+
 
 def predict_tex(seatemp, lat, lon, temptype, nens=5000):
     """Predict TEX86 from sea temperature
@@ -115,7 +241,8 @@ def predict_tex(seatemp, lat, lon, temptype, nens=5000):
         alpha_now = alpha_samples_comp[i]
         tex[:, i] = np.random.normal(seatemp * beta_now + alpha_now,
                                      np.sqrt(tau2_now))
-
+    tex[tex > 1] = 1
+    tex[tex < 0] = 0
     output = Prediction(ensemble=tex,
                         temptype=temptype,
                         latlon=(lat, lon),

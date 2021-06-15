@@ -1,3 +1,17 @@
+"""
+Core
+    Originator: Steven Brewster Malevich
+                University of Arizona Department of Geosciences
+
+    Revisions:  Mingsong Li
+                Penn State Geosciences
+    Date:       Sept 23, 2019
+                     
+    Purpose: add find_t_within_tolerance module in TexObs class
+            : Find mean modern sea temperature observations
+            that are within ± tolerance
+    
+"""
 from copy import deepcopy
 from pkgutil import get_data
 from io import BytesIO
@@ -47,7 +61,10 @@ def read_tex(obstype):
     obs_stack = var['Obs_Stack'].squeeze().item()
     inds_stack = var['Inds_Stack'].squeeze().item()
     obslocs = np.array([x[...].squeeze() for x in var['ObsLocs'].item().ravel() if x.any()])
-    return locs, obs_stack, inds_stack, obslocs
+    # return locs, obs_stack, inds_stack, obslocs
+    # M.Li
+    target_stack = var['Target_Stack'].squeeze().item()
+    return locs, obs_stack, inds_stack, obslocs, target_stack
 
 
 def chord_distance(latlon1, latlon2):
@@ -177,7 +194,55 @@ class TexObs:
     obs_stack = attr.ib()
     inds_stack = attr.ib()
     obslocs = attr.ib()
-
+    # M.Li added
+    target_stack = attr.ib()
+    
+    #M.Li added
+    def find_t_within_tolerance(self,t,tolerance):
+        """Find mean modern sea temperature observations that are within ± tolerance
+            cycle through the alpha/beta grid cells
+        
+        Parameters
+        ----------
+        t ： float
+            Mean sea temperature value.
+        tolerance : float
+            Value added and subtracted from 't' to get upper and lower tolerance bounds.
+             
+        Returns
+        ----------
+        latlon_match : list
+            An n-length list of latlon tuples where matches were found.
+        vals_match : ndarray
+            A 1d array (n) of corresponding TEX86 averages from each match.
+        inder_g : ndarray
+            A 1d array (n) of location in the big grids that has sea temp within
+            tolerance
+            
+        Originator:  Mingsong Li, Penn State Geosciences
+        Date:        25 September, 2019
+        """
+        n_bg = len(self.locs)  # number of big grids
+        upper_bound = t + tolerance   # upper bound of sea temperature range
+        lower_bound = t - tolerance  # lower bound of sea temperature range
+        inder_g =[]
+        vals_match = []
+        # search eachi big grid
+        for kk in range(1, n_bg+1):
+            # find the mean SST obs corresponding to this index location
+            # 
+            vals = self.target_stack[self.inds_stack == kk]
+            #
+            vals_mean = vals.mean()
+            # if the mean of vals in the big grids within tolerance, add it to inder_g
+            if lower_bound <= vals_mean <= upper_bound:
+                idx = kk-1  # Back to 0-based idx
+                inder_g.append(idx)
+                vals_match.append(vals_mean)
+                
+        latlon_match = [tuple(x) for x in self.locs[inder_g, ::-1].tolist()]
+        return latlon_match, np.array(vals_match), np.array(inder_g)
+    
     def find_within_tolerance(self, x, tolerance):
         """Find mean TEX86 observations that are within ± tolerance from x
 
