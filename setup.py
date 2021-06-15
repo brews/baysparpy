@@ -8,13 +8,13 @@ def readme():
 
 setup(
     name='baysparpy',
-    version='0.0.4',
+    version='0.0.5',
     description='An Open Source Python package for TEX86 calibration',
     long_description=readme(),
     license='GPLv3',
 
     author='S. Brewster Malevich, Mingsong Li',
-    author_email='malevich@email.arizona.edu, mul450@psu.edu',
+    author_email='malevich@email.arizona.edu, msli@pku.edu.cn',
     url='https://github.com/mingsongli/baysparpy',
     # rl='https://github.com/brews/baysparpy',
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
