@@ -15,6 +15,9 @@
                 Penn State Geosciences
     Date:       Sept 23, 2019
 
+    Revision: Mingsong Li
+                Peking University
+    Date:       Jun 16, 2021
                      
     Purpose: add predict_tex_analog module
              
@@ -144,48 +147,48 @@ def predict_tex_analog(seatemp, temptype = 'sst', search_tol = 5., nens=5000):
     ntk = draws.alpha_samples_comp.shape[1]
     if ntk < nens:
         raise EnsembleSizeError(ntk, nens)
-    #print('Number of input sea temp = {}.'.format(nd))  #debug
+        
     latlon_match, val_match, inder_g = tex_obs.find_t_within_tolerance(t=seatemp.mean(),
                                                                        tolerance=search_tol)
     
-    #print('latlon_match number = {}, number of matched value = {}'.format(len(latlon_match), len(val_match)))
     if inder_g.size == 0:
         sys.exit('No analogs were found. Check seatemp or make your search tolerance wider.')
         
-    alpha_samples = draws.alpha_samples_comp[inder_g]
+    alpha_samples1 = draws.alpha_samples_comp[inder_g]
     
-    beta_samples = draws.beta_samples_comp[inder_g]
-    tau2_samples = draws.tau2_samples.reshape((draws.tau2_samples.size,1)).T
+    beta_samples1 = draws.beta_samples_comp[inder_g]
+    tau2_samples1 = draws.tau2_samples.reshape((draws.tau2_samples.size,1)).T
 
-    tau2_sample_reshapen = int(alpha_samples.shape[0] * alpha_samples.shape[1] / draws.tau2_samples.size)
+    tau2_sample_reshapen = int(alpha_samples1.shape[0] * alpha_samples1.shape[1] / draws.tau2_samples.size)
     
-    alpha_samples = np.reshape(alpha_samples, (alpha_samples.size, ))
-    #print('mean of reshaped alpha_samples {}'.format(np.mean(alpha_samples)))
-    beta_samples = np.reshape(beta_samples, (beta_samples.size, ))
+    alpha_samples = np.reshape(alpha_samples1, (alpha_samples1.size, ))
+    beta_samples = np.reshape(beta_samples1, (beta_samples1.size, ))
     
-    tau2_samples = np.matlib.repmat(tau2_samples, 1, tau2_sample_reshapen)
-    tau2_samples = np.reshape(tau2_samples, (tau2_samples.size, ))
+    tau2_samples2 = np.matlib.repmat(tau2_samples1, 1, tau2_sample_reshapen)
+    tau2_samples = np.reshape(tau2_samples2, (tau2_samples2.size, ))
     
     # downsample to nens = 5000
     iters=alpha_samples.size
     ds=round(float(iters)/nens)
     dsarray = np.arange(0,alpha_samples.size,ds)
     
-    alpha_samples = alpha_samples[dsarray]
+    alpha_samples3 = alpha_samples[dsarray]
     #print('mean of sliced alpha_samples {}'.format(np.mean(alpha_samples)))
-    beta_samples = beta_samples[dsarray]
-    tau2_samples = tau2_samples[dsarray]
+    beta_samples3 = beta_samples[dsarray]
+    tau2_samples3 = tau2_samples[dsarray]
         
     # numpy empty storing tex data
     tex = np.empty((nd, nens))
     # estimate tex using given alpha_samples_comp, beta_samples_comp, and tau2_samples
     for i in range(nens):
-        tau2_now = tau2_samples[i]
-        beta_now = beta_samples[i]
-        alpha_now = alpha_samples[i]
+        tau2_now  = tau2_samples3[i]
+        beta_now  = beta_samples3[i]
+        alpha_now = alpha_samples3[i]
         tex[:, i] = np.random.normal(seatemp * beta_now + alpha_now,
                                      np.sqrt(tau2_now))
-        
+    
+    tex[tex > 1] = 1
+    tex[tex < 0] = 0
     #grid_latlon = draws.find_nearest_latlon(lat=lat, lon=lon)  # useless?
     output = Prediction(ensemble=tex,
                         temptype=temptype,
@@ -238,7 +241,8 @@ def predict_tex(seatemp, lat, lon, temptype, nens=5000):
         alpha_now = alpha_samples_comp[i]
         tex[:, i] = np.random.normal(seatemp * beta_now + alpha_now,
                                      np.sqrt(tau2_now))
-
+    tex[tex > 1] = 1
+    tex[tex < 0] = 0
     output = Prediction(ensemble=tex,
                         temptype=temptype,
                         latlon=(lat, lon),

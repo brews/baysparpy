@@ -1,5 +1,5 @@
-baysparpy
-=========
+baysparpy3
+==========
 
 .. image:: https://travis-ci.org/brews/baysparpy.svg?branch=master
     :target: https://travis-ci.org/brews/baysparpy
@@ -9,12 +9,14 @@ An Open Source Python package for TEX86 calibration.
 
 This package is based on the original BAYSPAR (BAYesian SPAtially-varying Regression) for MATLAB (https://github.com/jesstierney/BAYSPAR).
 
+This package is the updated version of baysparpy with new module(s) such as `predict_tex_analog`
+based on the original python version of BAYSPAR (https://github.com/brews/baysparpy).
 
 Quick example
 -------------
 
 Standard prediction
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 
 First, load key packages and an example dataset:
@@ -43,7 +45,7 @@ You can also plot your prediction with ``bsr.predictplot()`` or ``bsr.densityplo
 
 
 Analog prediction
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 
 Begin by loading data for a “Deep-Time” analog prediction:
@@ -70,7 +72,7 @@ We can also examine our prediction as though it were a standard prediction. For 
 
 
 Forward prediction
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 
 For this example, we make inferences about TEX86 from SST data using a forward-model prediction. We start by creating a SST series spanning from 0 - 40 °C. 
@@ -92,7 +94,7 @@ As might be expected, we can use the output of the forward prediction to parse a
     
 
 Analog forward prediction
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 This tool will calculate forwarded TEX using given SST data. Here is an example:
@@ -113,7 +115,7 @@ And then plug the SST data into ``predict_tex_analog()`` along with additional i
 We can use the output of the forward prediction to parse and plot.
 
 Read More
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
 
 
 For further details, examples, and additional prediction functions, see the online documentation (https://baysparpy.readthedocs.io).
@@ -126,7 +128,7 @@ To install **baysparpy** with pip, run:
 
 .. code-block:: bash
 
-    $ pip install baysparpy
+    $ pip install baysparpy3
 
 To install with conda, run:
 
@@ -141,7 +143,7 @@ Support and development
 
 - Documentation is available online (https://baysparpy.readthedocs.io).
 
-- Please feel free to report bugs and issues or view the source code on GitHub (https://github.com/brews/baysparpy) and (https://github.com/mingsongli/baysparpy).
+- Please feel free to report bugs and issues or view the source code on GitHub (https://github.com/mingsongli/baysparpy).
 
 
 License

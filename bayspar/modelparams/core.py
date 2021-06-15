@@ -116,14 +116,14 @@ def get_draws(drawtype):
 
 # for analog tex forward model
 draws_sst_analog = Draws(alpha_samples_comp=read_draws('alpha_samples.mat', 'sst'),
-                      beta_samples_comp=read_draws('beta_samples.mat', 'sst'),
-                      tau2_samples=read_draws('tau2_samples.mat', 'sst'),
-                      locs_comp=read_draws('Locs_Comp.mat', 'sst'))
+                         beta_samples_comp=read_draws('beta_samples.mat', 'sst'),
+                         tau2_samples=read_draws('tau2_samples.mat', 'sst'),
+                         locs_comp=read_draws('Locs_Comp.mat', 'sst'))
 
 draws_subt_analog = Draws(alpha_samples_comp=read_draws('alpha_samples.mat', 'subt'),
-                       beta_samples_comp=read_draws('beta_samples.mat', 'subt'),
-                       tau2_samples=read_draws('tau2_samples.mat', 'subt'),
-                       locs_comp=read_draws('Locs_Comp.mat', 'subt'))
+                          beta_samples_comp=read_draws('beta_samples.mat', 'subt'),
+                          tau2_samples=read_draws('tau2_samples.mat', 'subt'),
+                          locs_comp=read_draws('Locs_Comp.mat', 'subt'))
 
 def get_draws_analog(drawtype):
     """Get Draws instance for a draw type
