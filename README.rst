@@ -9,6 +9,8 @@ An Open Source Python package for TEX86 calibration.
 
 This package is based on the original BAYSPAR (BAYesian SPAtially-varying Regression) for MATLAB (https://github.com/jesstierney/BAYSPAR).
 
+NOTE This repository and package is no longer actively maintained.
+
 
 Quick example
 -------------
